@@ -4,6 +4,10 @@ shopping_list_default:
     options:
         expose: true
 
+shopping_search_products_default:
+    path:     /search-products
+    defaults: { _controller: ShoppingListBundle:Default:searchProducts }
+
 shopping_list_add_product_ajax:
     path:     /add-product
     defaults: { _controller: ShoppingListBundle:Default:addProductAjax }
