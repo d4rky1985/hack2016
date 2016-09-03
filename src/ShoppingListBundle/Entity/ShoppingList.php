@@ -36,9 +36,9 @@ class ShoppingList
     private $id;
 
     /**
-     * @var \AppBundle\Entity\Users
+     * @var \AppBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Users")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * })
@@ -108,11 +108,11 @@ class ShoppingList
     /**
      * Set user
      *
-     * @param \AppBundle\Entity\Users $user
+     * @param \ShoppingListBundle\Entity\Users $user
      *
      * @return ShoppingList
      */
-    public function setUser(\AppBundle\Entity\Users $user = null)
+    public function setUser(\ShoppingListBundle\Entity\Users $user = null)
     {
         $this->user = $user;
 
@@ -122,7 +122,7 @@ class ShoppingList
     /**
      * Get user
      *
-     * @return \AppBundle\Entity\Users
+     * @return \ShoppingListBundle\Entity\Users
      */
     public function getUser()
     {

@@ -22,9 +22,9 @@ class ListsToProducts
     private $id;
 
     /**
-     * @var \AppBundle\Entity\ShoppingList
+     * @var \ShoppingListBundle\Entity\ShoppingList
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ShoppingList")
+     * @ORM\ManyToOne(targetEntity="ShoppingListBundle\Entity\ShoppingList")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="shopping_list_id", referencedColumnName="id")
      * })
@@ -32,9 +32,9 @@ class ListsToProducts
     private $shoppingList;
 
     /**
-     * @var \AppBundle\Entity\Products
+     * @var \ShoppingListBundle\Entity\Products
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Products")
+     * @ORM\ManyToOne(targetEntity="ShoppingListBundle\Entity\Products")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="product_id", referencedColumnName="id")
      * })
@@ -56,11 +56,11 @@ class ListsToProducts
     /**
      * Set shoppingList
      *
-     * @param \AppBundle\Entity\ShoppingList $shoppingList
+     * @param \ShoppingListBundle\Entity\ShoppingList $shoppingList
      *
      * @return ListsToProducts
      */
-    public function setShoppingList(\AppBundle\Entity\ShoppingList $shoppingList = null)
+    public function setShoppingList(\ShoppingListBundle\Entity\ShoppingList $shoppingList = null)
     {
         $this->shoppingList = $shoppingList;
 
@@ -70,7 +70,7 @@ class ListsToProducts
     /**
      * Get shoppingList
      *
-     * @return \AppBundle\Entity\ShoppingList
+     * @return \ShoppingListBundle\Entity\ShoppingList
      */
     public function getShoppingList()
     {
@@ -80,11 +80,11 @@ class ListsToProducts
     /**
      * Set product
      *
-     * @param \AppBundle\Entity\Products $product
+     * @param \ShoppingListBundle\Entity\Products $product
      *
      * @return ListsToProducts
      */
-    public function setProduct(\AppBundle\Entity\Products $product = null)
+    public function setProduct(\ShoppingListBundle\Entity\Products $product = null)
     {
         $this->product = $product;
 
@@ -94,7 +94,7 @@ class ListsToProducts
     /**
      * Get product
      *
-     * @return \AppBundle\Entity\Products
+     * @return \ShoppingListBundle\Entity\Products
      */
     public function getProduct()
     {
