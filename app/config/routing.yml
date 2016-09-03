@@ -1,7 +1,6 @@
 shopping_list:
-    resource: "@ShoppingListBundle/Controller/"
-    type:     annotation
-    prefix:   /
+    resource: "@ShoppingListBundle/Resources/config/routing.yml"
+    prefix:   /shopping-list
 
 app:
     resource: "@AppBundle/Controller/"

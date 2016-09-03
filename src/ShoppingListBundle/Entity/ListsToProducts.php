@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace ShoppingListBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
