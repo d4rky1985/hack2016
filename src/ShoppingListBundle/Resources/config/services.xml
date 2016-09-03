@@ -8,6 +8,10 @@
                 <argument type="service" id="doctrine.orm.entity_manager"/>
             </call>
         </service>
-
+        <service id="hack2016.product.service" class="ShoppingListBundle\Service\ProductService">
+            <call method="setEntityManager">
+                <argument type="service" id="doctrine.orm.entity_manager"/>
+            </call>
+        </service>
     </services>
 </container>
