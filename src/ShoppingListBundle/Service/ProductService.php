@@ -3,12 +3,17 @@ namespace ShoppingListBundle\Service;
 
 use Doctrine\ORM\EntityManager;
 use ShoppingListBundle\Entity\Products;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use ShoppingListBundle\Repository\ProductsRepository;
 
 /**
  * Class ProductService.
  */
 class ProductService
 {
+    /** @const string */
+    const ID = 'hack2016.product.service';
+
     /** @var  EntityManager */
     protected $entityManager;
 
@@ -28,6 +33,11 @@ class ProductService
         $this->entityManager = $entityManager;
     }
 
+    public function getShoppingListProducts() {
+
+        return;
+    }
+
     /**
      * @param string $name
      */
@@ -44,5 +54,22 @@ class ProductService
         $product->setStatus(Products::STATUS_NOT_BOUGHT);
         $this->getEntityManager()->persist($product);
         $this->getEntityManager()->flush();
+    }
+
+    /**
+     * @param $productId
+     * @return null|object
+     */
+    public function getRecommendedProduct($productId)
+    {
+        $product = $this->getEntityManager()
+            ->getRepository('ShoppingListBundle:ProductSuggestion')
+            ->find($productId);
+
+        if (empty($product)) {
+            throw new NotFoundHttpException();
+        }
+
+        return $product;
     }
 }

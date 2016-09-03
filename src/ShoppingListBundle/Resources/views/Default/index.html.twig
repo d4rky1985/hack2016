@@ -1,8 +1,101 @@
 {% extends '::base.html.twig' %}
-
 {% block page %}
-    <div data-role="page" class="jqm-demos jqm-home" id="page_index" class="page_index">
+    <script>
+        $( document ).on( "pagecreate", "#demo-intro", function() {
+            $( document ).on( "swipeleft swiperight", "#list li", function( event ) {
+                var listitem = $( this ),
+                        dir = event.type === "swipeleft" ? "left" : "right",
+                        transition = $.support.cssTransform3d ? dir : false;
+                confirmAndDelete( listitem, transition );
+            });
 
+            if ( ! $.mobile.support.touch ) {
+                $( "#list" ).removeClass( "touch" );
+                $( ".delete" ).on( "click", function() {
+                    var listitem = $( this ).parent( "li" );
+
+                    confirmAndDelete( listitem );
+                });
+            }
+
+            function confirmAndDelete( listitem, transition ) {
+                listitem.children( ".ui-btn" ).addClass( "ui-btn-active" );
+                $( "#confirm .topic" ).remove();
+                listitem.find( ".topic" ).clone().insertAfter( "#question" );
+                $( "#confirm" ).popup( "open" );
+                $( "#confirm #yes" ).on( "click", function() {
+                    if ( transition ) {
+
+                        listitem
+                                .addClass( transition )
+                                .on( "webkitTransitionEnd transitionend otransitionend", function() {
+                                    listitem.remove();
+                                    $( "#list" ).listview( "refresh" ).find( ".border-bottom" ).removeClass( "border-bottom" );
+                                })
+                                .prev( "li" ).children( "a" ).addClass( "border-bottom" )
+                                .end().end().children( ".ui-btn" ).removeClass( "ui-btn-active" );
+                    }
+                    else {
+                        listitem.remove();
+                        $( "#list" ).listview( "refresh" );
+                    }
+                });
+                $( "#confirm #cancel" ).on( "click", function() {
+                    listitem.children( ".ui-btn" ).removeClass( "ui-btn-active" );
+                    $( "#confirm #yes" ).off();
+                });
+            }
+        });
+    </script>
+    <style>
+        /* Left transition */
+        li.left {
+            -webkit-transition: -webkit-transform 250ms ease;
+            -webkit-transform: translateX(-100%);
+            -moz-transition: -moz-transform 250ms ease;
+            -moz-transform: translateX(-100%);
+            -o-transition: -o-transform 250ms ease;
+            -o-transform: translateX(-100%);
+            transition: transform 250ms ease;
+            transform: translateX(-100%);
+        }
+        /* Right transition */
+        li.right {
+            -webkit-transition: -webkit-transform 250ms ease;
+            -webkit-transform: translateX(100%);
+            -moz-transition: -moz-transform 250ms ease;
+            -moz-transform: translateX(100%);
+            -o-transition: -o-transform 250ms ease;
+            -o-transform: translateX(100%);
+            transition: transform 250ms ease;
+            transform: translateX(100%);
+        }
+        /* Border bottom for the previous button during the transition*/
+        li.left a.ui-btn,
+        li.right a.ui-btn {
+            border-top-width: 0;
+            border-left-width: 1px;
+            border-right-width: 1px;
+        }
+        li a.ui-btn.border-bottom {
+            border-bottom-width: 1px;
+        }
+        /* Hide the delete button on touch devices */
+        ul.touch li.ui-li-has-alt a.delete {
+            display: none;
+        }
+        ul.touch li.ui-li-has-alt a.ui-btn {
+            margin-right:0;
+        }
+        /* Styling for the popup */
+        #confirm p {
+            text-align: center;
+            font-size: inherit;
+            margin-bottom: .75em;
+        }
+    </style>
+
+    <div data-role="page" class="jqm-demos jqm-home" id="demo-intro">
         {% include '::includes/header.html.twig' %}
         <div role="main" class="ui-content jqm-content">
             <form class="ui-filterable">
@@ -16,16 +109,98 @@
                         </div>
                     </div>
                 </fieldset>
-
-
             </form>
             <ul id="autocomplete" data-role="listview" data-inset="true" data-filter="true" data-input="#autocomplete-input"></ul>
+
+            <a href="#popupProduct"
+               data-inline="true"
+               data-role="button"
+               data-position-to="window"
+               data-rel="popup"
+               aria-haspopup="true"
+               aria-owns="popupLogin"
+               aria-expanded="false"
+               class="ui-link ui-btn ui-btn-inline ui-shadow ui-corner-all"
+               role="button">Form</a>
+
+            <div data-theme="a" id="popupProduct" data-role="popup" data-overlay-theme="a" class="ui-content">
+                <div style="padding:20px">
+                    <p>Cum ti-ar sta cu palarie?</p>
+                    <p><img src="https://s0emagst.akamaized.net/products/3888/3887197/images/res_9e1c595489d192168d4c10d8244f91c2_450x450_100_70jc.jpg" width="200"></p>
+                    <a href="http://m.emag.ro/palarie-kangol-sweetcorn-siren-mov-m-6927bcb2/pd/D9G9D2BBM/" class="ui-btn ui-btn-b ui-shadow ui-corner-all">Buy now</a>
+                    <a href="" id="btnPopupAddProduct" class="ui-btn ui-btn-b ui-shadow ui-corner-all">Add to wish list</a>
+                    <a href="" id="btnPopupClose" class="ui-btn ui-btn-b ui-shadow ui-corner-all">No, thank you!</a>
+                </div>
+            </div>
+
+            <div id="popupError" class="ui-content" data-role="popup" data-theme="a">
+                <p>Sorry! An error occured.</p>
+                <div class="ui-grid-a">
+                    <div class="ui-block-a">
+                        <a href="ok" id="ok" class="ui-btn ui-corner-all ui-mini ui-btn-a" data-rel="back">Ok</a>
+                    </div>
+                </div>
+            </div>
+
+            <ul id="list" data-count-theme="b" class="ui-listview" data-role="listview" data-icon="false"
+                data-split-icon="delete">
+                <li class="ui-li-has-alt ui-first-child">
+                    <a class="ui-btn" href="#demo-mail">
+                        <img src="../_assets/img/album-bb.jpg">
+                        <h3>Produs 1</h3>
+                        <p><strong>Short description</strong></p>
+                        <p>Long description blah blah blah blah blah blah blah</p>
+                        <span class="ui-li-count">12</span>
+                    </a>
+                    <a title="Remove from favorites" href="#" class="delete ui-btn ui-btn-icon-notext
+                    ui-icon-star"></a>
+                </li>
+                <li class="ui-li-has-alt">
+                    <a class="ui-btn" href="#demo-mail">
+                        <img src="../_assets/img/album-bb.jpg">
+                        <h3>Produs 2</h3>
+                        <p><strong>Short description</strong></p>
+                        <p>Long description blah blah blah blah blah blah blah</p>
+                        <span class="ui-li-count">35</span>
+                    </a>
+                    <a title="Remove from favorites" href="#" class="delete ui-btn ui-btn-icon-notext
+                    ui-icon-star"></a>
+                </li>
+                <li class="ui-li-has-alt">
+                    <a class="ui-btn" href="#demo-mail">
+                        <img src="../_assets/img/album-bb.jpg">
+                        <h3>Produs 2</h3>
+                        <p><strong>Short description</strong></p>
+                        <p>Long description blah blah blah blah blah blah blah</p>
+                        <span class="ui-li-count">35</span>
+                    </a>
+                    <a href="#" class="ui-btn"></a>
+                </li>
+            </ul>
+
+            <div id="confirm-placeholder" style="display: none;"><!-- placeholder for confirm --></div><!-- /popup -->
+            <div id="confirm-screen" class="ui-popup-screen ui-overlay-inherit ui-screen-hidden"></div><div id="confirm-popup" class="ui-popup-container ui-popup-hidden ui-popup-truncate"><div id="confirm" class="ui-content ui-popup ui-body-a ui-overlay-shadow ui-corner-all" data-role="popup" data-theme="a">
+                    <p id="question">Set this product as bought?</p>
+                    <div class="ui-grid-a">
+                        <div class="ui-block-a">
+                            <a href="#" id="yes" class="ui-btn ui-corner-all ui-mini ui-btn-a"
+                               data-rel="back">Yes</a>
+                        </div>
+                        <div class="ui-block-b">
+                            <a href="#" id="cancel" class="ui-btn ui-corner-all ui-mini ui-btn-a"
+                               data-rel="back">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div><!-- /content -->
+
         {% include '::includes/menu.html.twig' %}
         {% include '::includes/footer.html.twig' %}
 
         <script language="JavaScript">
-            $( document ).on( "pagecreate", "#page_index", function() {
+            $( document ).on( "pagecreate", "#demo-intro", function() {
                 $("#autocomplete").on("filterablebeforefilter", function (e, data) {
                     var $ul = $(this),
                             $input = $(data.input),
@@ -72,6 +247,27 @@
                         });
                     }
                 }
+
+                $('#btnPopupClose').on('click', function(e){
+                    e.preventDefault();
+                    $('#popupProduct').popup('close');
+                });
+
+                $('#btnPopupAddProduct').on('click', function(e) {
+                    e.preventDefault();
+                    $.mobile.loading('show');
+                    $.post(Routing.generate('shopping_list_add_product_ajax', { productId: {{ productId }} }))
+                        .done(function () {
+                            $.mobile.loading('hide');
+                            $('#popupProduct').popup('close');
+                        })
+                        .fail(function() {
+                            $.mobile.loading('hide');
+                            $('#popupProduct').popup('close');
+                            $('#popupError').delay(500).popup('open');
+                        });
+                });
+
             });
         </script>
 

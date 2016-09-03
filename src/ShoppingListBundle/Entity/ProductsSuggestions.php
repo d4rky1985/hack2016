@@ -5,28 +5,19 @@ namespace ShoppingListBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Products
+ * ProductsSuggestions
  *
- * @ORM\Table(name="products")
- * @ORM\Entity(repositoryClass="ShoppingListBundle\Repository\ProductsRepository")
+ * @ORM\Table(name="products_suggestions")
+ * @ORM\Entity(repositoryClass="ShoppingListBundle\Repository\ProductsSuggestionsRepository")
  */
-class Products
+class ProductsSuggestions
 {
-    const STATUS_BOUGHT = 1;
-    const STATUS_NOT_BOUGHT = 0;
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="price", type="decimal", precision=8, scale=2, nullable=true)
-     */
-    private $price;
 
     /**
      * @var string
@@ -59,9 +50,9 @@ class Products
     /**
      * @var integer
      *
-     * @ORM\Column(name="status", type="integer")
+     * @ORM\Column(name="feeling_group", type="integer")
      */
-    private $status = self::STATUS_NOT_BOUGHT;
+    private $feelingGroup;
 
     /**
      * @var integer
@@ -79,7 +70,7 @@ class Products
      *
      * @param string $name
      *
-     * @return Products
+     * @return ProductsSuggestions
      */
     public function setName($name)
     {
@@ -99,30 +90,6 @@ class Products
     }
 
     /**
-     * Set price
-     *
-     * @param string $price
-     *
-     * @return Products
-     */
-    public function setPrice($price)
-    {
-        $this->price = $price;
-
-        return $this;
-    }
-
-    /**
-     * Get price
-     *
-     * @return string
-     */
-    public function getPrice()
-    {
-        return $this->price;
-    }
-
-    /**
      * @return string
      */
     public function getShortDescription()
@@ -133,7 +100,7 @@ class Products
     /**
      * @param string $shortDescription
      *
-     * @return Products
+     * @return ProductsSuggestions
      */
     public function setShortDescription($shortDescription)
     {
@@ -147,7 +114,7 @@ class Products
      *
      * @param string $description
      *
-     * @return Products
+     * @return ProductsSuggestions
      */
     public function setDescription($description)
     {
@@ -187,7 +154,7 @@ class Products
     /**
      * @param string $url
      *
-     * @return Products
+     * @return ProductsSuggestions
      */
     public function setUrl($url)
     {
@@ -207,7 +174,7 @@ class Products
     /**
      * @param string $image
      *
-     * @return Products
+     * @return ProductsSuggestions
      */
     public function setImage($image)
     {
@@ -219,16 +186,20 @@ class Products
     /**
      * @return int
      */
-    public function getStatus()
+    public function getFeelingGroup()
     {
-        return $this->status;
+        return $this->feelingGroup;
     }
 
     /**
-     * @param int $status
+     * @param int $feelingGroup
+     *
+     * @return ProductsSuggestions
      */
-    public function setStatus($status)
+    public function setFeelingGroup($feelingGroup)
     {
-        $this->status = $status;
+        $this->feelingGroup = $feelingGroup;
+
+        return $this;
     }
 }
