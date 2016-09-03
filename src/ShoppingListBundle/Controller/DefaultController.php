@@ -23,4 +23,12 @@ class DefaultController extends Controller
 
         return new JsonResponse($products);
     }
+
+    /**
+     * @return JsonResponse
+     */
+    public function addProductAjaxAction()
+    {
+        return new JsonResponse(array('success' => true));
+    }
 }
