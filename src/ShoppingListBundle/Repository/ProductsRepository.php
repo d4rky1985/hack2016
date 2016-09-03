@@ -3,6 +3,7 @@ namespace ShoppingListBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
+use ShoppingListBundle\Entity\Products;
 
 class ProductsRepository extends EntityRepository
 {
@@ -16,6 +17,8 @@ class ProductsRepository extends EntityRepository
             ->select('p.name')
             ->where('p.name LIKE :name')
             ->setParameter('name', '%' . $name . '%')
+            ->andWhere('p.status LIKE :status')
+            ->setParameter('status', Products::STATUS_BOUGHT)
             ->getQuery()->getResult();
     }
 }

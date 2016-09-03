@@ -44,7 +44,7 @@
                             }
                         }).then( function ( response ) {
                             $.each( response, function ( i, val ) {
-                                html += "<li><a href='#'>" + val.name + "</a></li>";
+                                html += "<li><a href='#' class='add-product-to-list'>" + val.name + "</a></li>";
                             });
                             $ul.html( html );
                             $ul.listview( "refresh" );
@@ -55,6 +55,9 @@
 
                 $('#add-product').click(function() {
                     addProduct($('#autocomplete-input').val().trim());
+                });
+                $(document).on('click', ".add-product-to-list", function(){
+                    addProduct($(this).html().trim());
                 });
 
                 function addProduct(product) {

@@ -39,7 +39,6 @@ class DefaultController extends Controller
         try {
             $productService->saveProduct(trim($request->request->get('product')));
         } catch (\Exception $e){
-            print_r($e->getMessage());die;
             return new JsonResponse(array('success' => false));
         }
         return new JsonResponse(array('success' => true));

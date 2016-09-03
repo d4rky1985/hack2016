@@ -30,7 +30,6 @@ class ProductService
 
     /**
      * @param string $name
-     * @return bool
      */
     public function saveProduct($name)
     {
@@ -45,7 +44,5 @@ class ProductService
         $product->setStatus(Products::STATUS_NOT_BOUGHT);
         $this->getEntityManager()->persist($product);
         $this->getEntityManager()->flush();
-
-        return true;
     }
 }

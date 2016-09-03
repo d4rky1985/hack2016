@@ -15,8 +15,10 @@ use Symfony\Component\Debug\Debug;
 //) {
 //    header('HTTP/1.0 403 Forbidden');
 //    exit('You are not allowed to access this file. Check '.basename(__FILE__).' for more information.');
-//}
-
+////}
+//$folder = __DIR__.'/../var/cache/*';
+//exec('rm -rf '.$folder);
+//die;
 umask(0000);
 
 /**
