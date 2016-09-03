@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace ShoppingListBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -29,9 +29,9 @@ class ProductsBought
     private $id;
 
     /**
-     * @var \AppBundle\Entity\Products
+     * @var \ShoppingListBundle\Entity\Products
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Products")
+     * @ORM\ManyToOne(targetEntity="ShoppingListBundle\Entity\Products")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="product_id", referencedColumnName="id")
      * })
@@ -39,9 +39,9 @@ class ProductsBought
     private $product;
 
     /**
-     * @var \AppBundle\Entity\Products
+     * @var \ShoppingListBundle\Entity\Products
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Products")
+     * @ORM\ManyToOne(targetEntity="ShoppingListBundle\Entity\Products")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      * })
@@ -87,11 +87,11 @@ class ProductsBought
     /**
      * Set product
      *
-     * @param \AppBundle\Entity\Products $product
+     * @param \ShoppingListBundle\Entity\Products $product
      *
      * @return ProductsBought
      */
-    public function setProduct(\AppBundle\Entity\Products $product = null)
+    public function setProduct(\ShoppingListBundle\Entity\Products $product = null)
     {
         $this->product = $product;
 
@@ -101,7 +101,7 @@ class ProductsBought
     /**
      * Get product
      *
-     * @return \AppBundle\Entity\Products
+     * @return \ShoppingListBundle\Entity\Products
      */
     public function getProduct()
     {
@@ -111,11 +111,11 @@ class ProductsBought
     /**
      * Set parent
      *
-     * @param \AppBundle\Entity\Products $parent
+     * @param \ShoppingListBundle\Entity\Products $parent
      *
      * @return ProductsBought
      */
-    public function setParent(\AppBundle\Entity\Products $parent = null)
+    public function setParent(\ShoppingListBundle\Entity\Products $parent = null)
     {
         $this->parent = $parent;
 
@@ -125,7 +125,7 @@ class ProductsBought
     /**
      * Get parent
      *
-     * @return \AppBundle\Entity\Products
+     * @return \ShoppingListBundle\Entity\Products
      */
     public function getParent()
     {

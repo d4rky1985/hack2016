@@ -1,0 +1,5 @@
+shopping_list_default:
+    path:     /
+    defaults: { _controller: ShoppingListBundle:Default:index }
+    options:
+        expose: true
