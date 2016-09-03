@@ -13,6 +13,11 @@ class DefaultController extends Controller
 
     public function indexAction()
     {
+        /** @var ProductService $productService */
+        $productService = $this->get(ProductService::ID);
+
+        $productList = $productService->getShoppingListProducts();
+
         return $this->render('ShoppingListBundle:Default:index.html.twig');
     }
 
