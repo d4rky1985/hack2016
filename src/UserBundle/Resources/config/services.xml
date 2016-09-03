@@ -7,5 +7,14 @@
                 <argument type="service" id="doctrine.orm.default_entity_manager"/>
             </call>
         </service>
+
+        <service id="notify.service" class="UserBundle\Service\NotifyService">
+            <call method="setEntityManager">
+                <argument type="service" id="doctrine.orm.default_entity_manager"/>
+            </call>
+            <call method="setUserService">
+                <argument type="service" id="user.service"/>
+            </call>
+        </service>
     </services>
 </container>

@@ -21,8 +21,8 @@ class UserService
     public function getFacebookHelper()
     {
         $fb = new Facebook([
-            'app_id' => '1092426070826105',
-            'app_secret' => '0b4ca07f6589f642575ee0d8e152a09f',
+            'app_id' => '334405686892982',
+            'app_secret' => '3cffe9f90f909e68101f7a95e5170a6f',
             'default_graph_version' => 'v2.5',
         ]);
 

@@ -10,5 +10,17 @@ use Doctrine\ORM\EntityRepository;
  */
 class UserRepository extends EntityRepository
 {
+    /**
+     * @return array
+     */
+    public function getUsersToNotify()
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->select('u')
+            ->where('u.fbToken IS NOT NULL')
+            ->andWhere('u.fbId IS NOT NULL');
+
+        return $qb->getQuery()->getResult();
+    }
 
 }

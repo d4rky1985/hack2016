@@ -27,7 +27,7 @@ class DefaultController extends Controller
         try {
             list ($fb, $fbHelper) = $userService->getFacebookHelper();
 
-            $permissions = ['public_profile', 'user_friends', 'user_about_me', 'user_birthday', 'user_events', 'user_posts', 'user_relationships', 'user_relationship_details'];
+            $permissions = ['public_profile', 'user_friends', 'user_about_me', 'user_birthday', 'user_events', 'user_posts', 'user_relationships', 'user_relationship_details', 'read_stream'];
             $loginUrl = $fbHelper->getLoginUrl('http://hack.ion.ghitun.rtr1-dev.emag.network/app_dev.php/user/login', $permissions);
         } catch (\Exception $e) {
             $error = $e->getMessage();
@@ -65,6 +65,7 @@ class DefaultController extends Controller
             }
         } catch (\Exception $e) {
             $error = $e->getMessage();
+            var_dump($e->getMessage());die();
         }
 
         return $this->render(
