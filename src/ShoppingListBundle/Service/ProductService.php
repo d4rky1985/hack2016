@@ -33,8 +33,6 @@ class ProductService
     }
 
     public function getShoppingListProducts() {
-        /** @var ProductsRepository $productRepository */
-        $sheetRepository = $this->entityManager->getRepository('ReturnsRmaBundle:Sheet');
 
         return;
     }
