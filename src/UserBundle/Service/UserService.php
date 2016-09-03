@@ -23,7 +23,7 @@ class UserService
         $fb = new Facebook([
             'app_id' => '334405686892982',
             'app_secret' => '3cffe9f90f909e68101f7a95e5170a6f',
-            'default_graph_version' => 'v2.5',
+            'default_graph_version' => 'v2.7',
         ]);
 
         return array(

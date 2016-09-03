@@ -92,20 +92,21 @@ class NotifyService
                 if ($response->getHttpStatusCode() == Response::HTTP_OK) {
                     $fbPosts = $response->getDecodedBody();
 
-                    //var_dump($fbPosts);
-
                     foreach ($fbPosts['data'] as $post) {
-                        $response = $fb->get('/'.$post['id'], $accesToken);
+                        if (isset($post['message'])) {
+                            $words = explode(' ', $post['message']);
+                            $result = $this->verifyFeed($words);
 
-                        print_r($response);
-                        die();
-
+                            if ($result) {
+                                $this->notifyUser($result);
+                                return;
+                            }
+                        }
                     }
-
-
                 }
             } catch (\Exception $e) {
-                var_dump($e->getMessage());
+                $output->writeln('<info>[' . date('Y-m-d H:i:s') . ']' .
+                    'Error: ' . $e->getMessage() . '</info>');
             }
         }
     }
