@@ -8,10 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
  * Products
  *
  * @ORM\Table(name="products")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="ShoppingListBundle\Repository\ProductsRepository")
  */
 class Products
 {
+    const STATUS_BOUGHT = 1;
+    const STATUS_NOT_BOUGHT = 0;
     /**
      * @var string
      *
@@ -53,6 +55,13 @@ class Products
      * @ORM\Column(name="image", type="string", length=100, nullable=false)
      */
     private $image;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="status", type="integer")
+     */
+    private $status = self::STATUS_NOT_BOUGHT;
 
     /**
      * @var integer
@@ -205,5 +214,21 @@ class Products
         $this->image = $image;
 
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param int $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
     }
 }
