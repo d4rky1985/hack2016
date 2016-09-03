@@ -7,9 +7,13 @@
         <div role="main" class="ui-content jqm-content">
             <form class="ui-filterable">
                 <fieldset class="ui-grid-b">
-                    <div class="ui-block-b" style="width: 75%; margin-top:3px;"><input id="autocomplete-input" data-type="search" placeholder="Add a product..."></div>
+                    <div class="ui-block-b" style="width: 75%; margin-top:3px;">
+                        <input id="autocomplete-input" data-type="search" placeholder="Add a product...">
+                    </div>
                     <div class="ui-block-c" style="width: 25%">
-                        <div align="right"><a href="#" class="ui-btn ui-btn-inline ui-icon-arrow-d ui-btn-icon-right">add</a></div>
+                        <div align="right">
+                            <a href="#" class="ui-btn ui-btn-inline ui-icon-arrow-d ui-btn-icon-right" id="add-product">add</a>
+                        </div>
                     </div>
                 </fieldset>
 
@@ -48,6 +52,23 @@
                         });
                     }
                 });
+
+                $('#add-product').click(function() {
+                    addProduct($('#autocomplete-input').val().trim());
+                });
+
+                function addProduct(product) {
+                    if (product.length > 0) {
+                        $.ajax({
+                            method: "POST",
+                            url: "{{ path('shopping_list_add_product_ajax') }}",
+                            dataType: "json",
+                            data: { product: product }
+                        }).then( function ( response ) {
+                            console.log(response);
+                        });
+                    }
+                }
             });
         </script>
 
