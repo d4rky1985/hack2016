@@ -29,9 +29,30 @@ class Products
     /**
      * @var string
      *
+     * @ORM\Column(name="short_description", type="text", length=65535, nullable=true)
+     */
+    private $shortDescription;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="description", type="text", length=65535, nullable=true)
      */
     private $description;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="url", type="string", length=255, nullable=false)
+     */
+    private $url;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="image", type="string", length=100, nullable=false)
+     */
+    private $image;
 
     /**
      * @var integer
@@ -93,6 +114,26 @@ class Products
     }
 
     /**
+     * @return string
+     */
+    public function getShortDescription()
+    {
+        return $this->shortDescription;
+    }
+
+    /**
+     * @param string $shortDescription
+     *
+     * @return Products
+     */
+    public function setShortDescription($shortDescription)
+    {
+        $this->shortDescription = $shortDescription;
+
+        return $this;
+    }
+
+    /**
      * Set description
      *
      * @param string $description
@@ -124,5 +165,45 @@ class Products
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param string $url
+     *
+     * @return Products
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param string $image
+     *
+     * @return Products
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+
+        return $this;
     }
 }
