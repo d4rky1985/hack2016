@@ -4,16 +4,19 @@ namespace ShoppingListBundle\Controller;
 
 use ShoppingListBundle\Service\ProductService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
+    const NO_PRODUCT_ID = 0;
 
-    public function indexAction()
+    public function indexAction($productId = self::NO_PRODUCT_ID)
     {
-        return $this->render('ShoppingListBundle:Default:index.html.twig');
+        return $this->render(
+            'ShoppingListBundle:Default:index.html.twig',
+            ['productId' => $productId]
+        );
     }
 
     /**
@@ -29,7 +32,9 @@ class DefaultController extends Controller
         return new JsonResponse($products);
     }
 
-    /**
+    /**\
+     * @param Request $request
+     * @param $productId
      * @return JsonResponse
      */
     public function addProductAjaxAction(Request $request)

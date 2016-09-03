@@ -65,28 +65,6 @@
                             });
                 }
             });
-
-
-            $('#btnPopupClose').on('click', function(e){
-                e.preventDefault();
-                $('#popupProduct').popup('close');
-            });
-
-            $('#btnPopupAddProduct').on('click', function(e) {
-                e.preventDefault();
-                $.mobile.loading('show');
-                $.post("test.html")
-                        .done(function () {
-                            $('body').loader('hide');
-                            $('#popupProduct').popup('close');
-                        })
-                        .fail(function() {
-                            $.mobile.loading('hide');
-                            $('#popupProduct').popup('close');
-                        });
-
-            });
-
         });
     </script>
 </div><!-- /page -->
