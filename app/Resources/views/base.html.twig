@@ -12,7 +12,8 @@
     <script src="{{ asset("bundles/app/js/index.js") }}"></script>
     {#<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>#}
     <script src="{{ asset("bundles/app/js/jquery.mobile-1.4.5.min.js") }}"></script>
-
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
     {% block stylesheets %}{% endblock %}
 </head>
 <body>
