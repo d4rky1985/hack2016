@@ -61,7 +61,7 @@ class ProductService
 
     /**
      * @param $productId
-     * @return ProductSuggestion
+     * @return null|object
      */
     public function getRecommendedProduct($productId)
     {
