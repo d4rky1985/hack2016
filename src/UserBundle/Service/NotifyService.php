@@ -9,7 +9,14 @@ use Facebook\Authentication\AccessToken;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpFoundation\Response;
+use UserBundle\Entity\FeelingMapping;
+use UserBundle\Repository\FeelingMappingRepository;
 
+/**
+ * Class NotifyService
+ *
+ * @package UserBundle\Service
+ */
 class NotifyService
 {
     /** @const string */
@@ -92,22 +99,68 @@ class NotifyService
                 if ($response->getHttpStatusCode() == Response::HTTP_OK) {
                     $fbPosts = $response->getDecodedBody();
 
-                    //var_dump($fbPosts);
-
                     foreach ($fbPosts['data'] as $post) {
-                        $response = $fb->get('/'.$post['id'], $accesToken);
+                        if (isset($post['message'])) {
+                            $words = explode(' ', $post['message']);
+                            $result = $this->verifyFeed($words);
 
-                        print_r($response);
-                        die();
-
+                            if ($result) {
+                                $this->notifyUser($user, $result);
+                                return;
+                            }
+                        }
                     }
-
-
                 }
             } catch (\Exception $e) {
-                var_dump($e->getMessage());
+                $output->writeln('<info>[' . date('Y-m-d H:i:s') . ']' .
+                    'Error: ' . $e->getMessage() . '</info>');
             }
         }
+    }
+
+    /**
+     * @param $words
+     *
+     * @return bool|null|FeelingMapping
+     */
+    public function verifyFeed($words)
+    {
+        /** @var FeelingMappingRepository $feelingMappingRepository */
+        $feelingMappingRepository = $this->entityManager->getRepository('UserBundle:FeelingMapping');
+
+        foreach ($words as $word) {
+            $word = $this->removePunctuationFromWord($word);
+
+            $feelingMapping = $feelingMappingRepository->findOneBy(
+                array(
+                    'fbStatus' => $word
+                )
+            );
+
+            if ($feelingMapping instanceof FeelingMapping) {
+                return $feelingMapping;
+            }
+        }
+
+        return false;
+    }
+
+    //todo docblock
+    public function notifyUser($user, $feelingMapping)
+    {
+        //todo notify user by push up
+    }
+
+    /**
+     * @param $word
+     *
+     * @return string
+     */
+    public function removePunctuationFromWord($word) : string
+    {
+        $charsToRemove = array('!', ',', '.', '#', '?');
+
+        return str_replace($charsToRemove, '', $word);
     }
 
     /**

@@ -17,7 +17,7 @@ class DefaultController extends Controller
     /**
      * @return Response
      */
-    public function indexAction()
+    public function indexAction() : Response
     {
         /** @var UserService $userService */
         $userService = $this->get('user.service');
@@ -27,7 +27,7 @@ class DefaultController extends Controller
         try {
             list ($fb, $fbHelper) = $userService->getFacebookHelper();
 
-            $permissions = ['public_profile', 'user_friends', 'user_about_me', 'user_birthday', 'user_events', 'user_posts', 'user_relationships', 'user_relationship_details', 'read_stream'];
+            $permissions = ['public_profile', 'user_friends', 'user_about_me', 'user_birthday', 'user_events', 'user_posts', 'user_relationships', 'user_relationship_details', 'user_status'];
             $loginUrl = $fbHelper->getLoginUrl('http://hack.ion.ghitun.rtr1-dev.emag.network/app_dev.php/user/login', $permissions);
         } catch (\Exception $e) {
             $error = $e->getMessage();
@@ -42,7 +42,10 @@ class DefaultController extends Controller
         );
     }
 
-    public function loginAction()
+    /**
+     * @return Response
+     */
+    public function loginAction() : Response
     {
         /** @var UserService $userService */
         $userService = $this->get('user.service');
@@ -65,7 +68,6 @@ class DefaultController extends Controller
             }
         } catch (\Exception $e) {
             $error = $e->getMessage();
-            var_dump($e->getMessage());die();
         }
 
         return $this->render(
