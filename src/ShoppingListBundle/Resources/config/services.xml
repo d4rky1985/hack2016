@@ -13,5 +13,13 @@
                 <argument type="service" id="doctrine.orm.entity_manager"/>
             </call>
         </service>
+        <service id="hack2016.notification.service" class="ShoppingListBundle\Service\NotificationService">
+            <call method="setEntityManager">
+                <argument type="service" id="doctrine.orm.entity_manager"/>
+            </call>
+            <call method="setProductService">
+                <argument type="service" id="hack2016.product.service"/>
+            </call>
+        </service>
     </services>
 </container>
