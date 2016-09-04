@@ -2,8 +2,8 @@
 
 namespace UserBundle\Service;
 
-use AppBundle\Entity\User;
-use AppBundle\Repository\UserRepository;
+use UserBundle\Entity\User;
+use UserBundle\Repository\UserRepository;
 use Doctrine\ORM\EntityManager;
 use Facebook\Authentication\AccessToken;
 use ShoppingListBundle\Entity\ProductsSuggestions;
@@ -117,7 +117,7 @@ class NotifyService
     public function sendNotificationsCronAction(InputInterface $input, OutputInterface $output)
     {
         /** @var UserRepository $userRepository */
-        $userRepository = $this->entityManager->getRepository('AppBundle:User');
+        $userRepository = $this->entityManager->getRepository('UserBundle:User');
 
         $usersToCheck = $userRepository->getUsersToNotify();
 

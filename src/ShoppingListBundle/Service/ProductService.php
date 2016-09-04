@@ -64,7 +64,7 @@ class ProductService
                 'quantity' => $productsBoughtRepository->getProductQuantity($product->getId()),
                 'type' => $product->getType(),
             ];
-            if ($product->getStatus() == Products::STATUS_NOT_BOUGHT) {
+            if ($product->getStatus() === Products::STATUS_NOT_BOUGHT) {
                 $productsListNotBought[] = $productData;
                 continue;
             }
@@ -171,7 +171,7 @@ class ProductService
      *
      * @return array
      */
-    public function getReccomendedNotificationProducts()
+    public function getRecommendedNotificationProducts()
     {
         $productIds = array();
         $products = $this->getEntityManager()

@@ -2,6 +2,7 @@
 
 namespace ShoppingListBundle\Controller;
 
+use ShoppingListBundle\Entity\Products;
 use ShoppingListBundle\Service\ProductService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -10,9 +11,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class DefaultController extends Controller
 {
-    const NO_PRODUCT_ID = 0;
-
-    public function indexAction($productId = self::NO_PRODUCT_ID)
+    /**
+     * @param int $productId
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function indexAction($productId = Products::NO_PRODUCT_ID)
     {
         /** @var ProductService $productService */
         $productService = $this->get(ProductService::ID);

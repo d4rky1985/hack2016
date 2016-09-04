@@ -190,7 +190,7 @@ class ProductsSuggestions
      *
      * @return ProductsSuggestions
      */
-    public function setGender(string $gender)
+    public function setGender($gender)
     {
         $this->gender = $gender;
 

@@ -20,6 +20,8 @@ class Products
 
     const TYPE_FAV = 1;
     const TYPE_NOT_FAV = 0;
+
+    const NO_PRODUCT_ID = 0;
     /**
      * @var string
      *

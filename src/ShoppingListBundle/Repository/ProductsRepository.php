@@ -22,6 +22,9 @@ class ProductsRepository extends EntityRepository
             ->getQuery()->getResult();
     }
 
+    /**
+     * @return array
+     */
     public function getAllProducts() : array
     {
         return $this->createQueryBuilder('p')

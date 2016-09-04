@@ -1,14 +1,10 @@
 shopping_list:
     resource: "@ShoppingListBundle/Resources/config/routing.yml"
-    prefix:   /shopping-list
+    prefix:   /
 
 user:
     resource: "@UserBundle/Resources/config/routing.yml"
     prefix:   /user/
-
-app:
-    resource: "@AppBundle/Controller/"
-    type:     annotation
 
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"

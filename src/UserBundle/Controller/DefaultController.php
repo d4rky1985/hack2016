@@ -2,7 +2,7 @@
 
 namespace UserBundle\Controller;
 
-use AppBundle\Entity\User;
+use UserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use UserBundle\Service\UserService;

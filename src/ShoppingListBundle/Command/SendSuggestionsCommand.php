@@ -17,10 +17,14 @@ class SendSuggestionsCommand extends ContainerAwareCommand
             ->setHelp("This command allows you to send notifications based on buy frequency");
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var NotificationService $notificationService */
-        $notificationService = $this->getContainer()->get('hack2016.notification.service');
+        $notificationService = $this->getContainer()->get(NotificationService::ID);
         $notificationService->sendNotifications($output);
         $output->write('DONE!');
     }

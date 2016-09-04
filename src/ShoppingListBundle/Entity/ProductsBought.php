@@ -91,7 +91,7 @@ class ProductsBought
      *
      * @return ProductsBought
      */
-    public function setProduct(\ShoppingListBundle\Entity\Products $product = null)
+    public function setProduct(Products $product = null)
     {
         $this->product = $product;
 

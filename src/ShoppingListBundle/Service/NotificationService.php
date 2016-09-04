@@ -10,19 +10,15 @@ use Doctrine\ORM\EntityManager;
  */
 class NotificationService
 {
-    /** @var  ProductService */
+
+    /** @const string */
+    const ID = 'hack2016.notification.service';
+
+    /** @var  ProductService $productService */
     protected $productService;
 
-    /** @var  EntityManager */
+    /** @var  EntityManager $entityManager */
     protected $entityManager;
-
-    /**
-     * @return ProductService
-     */
-    public function getProductService()
-    {
-        return $this->productService;
-    }
 
     /**
      * @param ProductService $productService
@@ -33,14 +29,6 @@ class NotificationService
     }
 
     /**
-     * @return EntityManager
-     */
-    public function getEntityManager()
-    {
-        return $this->entityManager;
-    }
-
-    /**
      * @param EntityManager $entityManager
      */
     public function setEntityManager($entityManager)
@@ -48,12 +36,15 @@ class NotificationService
         $this->entityManager = $entityManager;
     }
 
+    /**
+     * @param OutputInterface $output
+     */
     public function sendNotifications(OutputInterface $output)
     {
-        $productIds = $this->getProductService()->getReccomendedNotificationProducts();
+        $productIds = $this->productService->getRecommendedNotificationProducts();
         foreach ($productIds as $productId) {
             /** @var Products $product */
-            $product = $this->getEntityManager()->getRepository('ShoppingListBundle:Products')->find($productId);
+            $product = $this->entityManager->getRepository('ShoppingListBundle:Products')->find($productId);
             $output->write('Send notification for product: ' . $product->getName());
         }
     }
