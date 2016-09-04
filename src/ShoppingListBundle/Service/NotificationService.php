@@ -109,6 +109,6 @@ class NotificationService
      */
     public function getUser()
     {
-        return $this->entityManager->getRepository('AppBundle:User')->find(1);
+        return $this->entityManager->getRepository('UserBundle:User')->find(1);
     }
 }

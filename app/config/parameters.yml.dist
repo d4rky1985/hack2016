@@ -21,3 +21,4 @@ parameters:
     # Push notification server details
     push_notification_server: ''
     push_notification_token: ''
+    app_link: ''

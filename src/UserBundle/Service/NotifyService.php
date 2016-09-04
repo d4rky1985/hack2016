@@ -249,7 +249,7 @@ class NotifyService
             $message = $product->getShortDescription();
         }
         if (is_null($url)) {
-            $this->router->getContext()->setBaseUrl($this->getAppLink());
+            $this->router->getContext()->setBaseUrl($this->appLink);
             $url = $this->router->generate('shopping_list_default', array('productId' => $product->getId()));
         }
         $fields = array
