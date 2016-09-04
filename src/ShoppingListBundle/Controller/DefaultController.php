@@ -13,6 +13,9 @@ class DefaultController extends Controller
 
     public function indexAction($productId = self::NO_PRODUCT_ID)
     {
+        /** @var ProductService $productService */
+        $productService = $this->get('hack2016.product.service');
+        $productService->getReccomendedNotificationProducts();die;
 
         return $this->render(
             'ShoppingListBundle:Default:index.html.twig',
