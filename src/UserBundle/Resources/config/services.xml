@@ -21,6 +21,12 @@
             <call method="setPushNotificationServer">
                 <argument>%push_notification_server%</argument>
             </call>
+            <call method="setRouter">
+                <argument type="service" id="router"/>
+            </call>
+            <call method="setAppLink">
+                <argument>%app_link%</argument>
+            </call>
         </service>
     </services>
 </container>

@@ -2,12 +2,12 @@
 
 namespace UserBundle\Service;
 
+use ShoppingListBundle\Repository\ProductsSuggestionsRepository;
+use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use UserBundle\Entity\User;
 use UserBundle\Repository\UserRepository;
 use Doctrine\ORM\EntityManager;
 use Facebook\Authentication\AccessToken;
-use ShoppingListBundle\Entity\ProductsSuggestions;
-use ShoppingListBundle\Repository\ProductsSuggestionsRepository;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,12 +36,25 @@ class NotifyService
     /** @var  string */
     protected $pushNotificationServer;
 
+    /** @var Router */
+    protected $router;
+
+    protected $appLink;
+
     /**
-     * @return mixed
+     * @param mixed $appLink
      */
-    public function getPushNotificationToken()
+    public function setAppLink($appLink)
     {
-        return $this->pushNotificationToken;
+        $this->appLink = $appLink;
+    }
+
+    /**
+     * @param Router $router
+     */
+    public function setRouter($router)
+    {
+        $this->router = $router;
     }
 
     /**
@@ -50,14 +63,6 @@ class NotifyService
     public function setPushNotificationToken($pushNotificationToken)
     {
         $this->pushNotificationToken = $pushNotificationToken;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPushNotificationServer()
-    {
-        return $this->pushNotificationServer;
     }
 
     /**
@@ -195,13 +200,14 @@ class NotifyService
             array(
                 'feelingGroup' => $feelingMapping->getStatusGroup(),
                 'gender' => $user->getSex()
-            )
-        );
+                )
+            );
         shuffle($productsSuggention);
 
         $productSuggention = $productsSuggention[0];
 
         $this->sendPushNotification($user->getPushToken(), $productSuggention);
+
     }
 
     /**
@@ -234,23 +240,30 @@ class NotifyService
 
     /**
      * @param $userPushToken
-     * @param ProductsSuggestions $product
+     * @param $product
      * @return bool
      */
-    public function sendPushNotification($userPushToken, ProductsSuggestions $product) : bool
+    public function sendPushNotification($userPushToken, $product, $message = null, $url = null) : bool
     {
+        if (is_null($message)) {
+            $message = $product->getShortDescription();
+        }
+        if (is_null($url)) {
+            $this->router->getContext()->setBaseUrl($this->getAppLink());
+            $url = $this->router->generate('shopping_list_default', array('productId' => $product->getId()));
+        }
         $fields = array
         (
-            'token'     => $this->getPushNotificationToken(),
+            'token'     => $this->pushNotificationToken,
             'user'      => $userPushToken,
-            'message'   => $product->getShortDescription(),
+            'message'   => $message,
             'title'     => "Wish Tellers",
             'url_title' => 'View more details',
-            'url'       => $product->getUrl(),
+            'url'       => $url,
         );
 
         $ch = curl_init();
-        curl_setopt( $ch, CURLOPT_URL, $this->getPushNotificationServer() );
+        curl_setopt( $ch, CURLOPT_URL, $this->pushNotificationServer );
         curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
         curl_setopt( $ch, CURLOPT_POSTFIELDS, $fields);
         $result = curl_exec($ch );

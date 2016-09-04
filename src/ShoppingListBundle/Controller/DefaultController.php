@@ -35,6 +35,19 @@ class DefaultController extends Controller
         return $this->render('ShoppingListBundle:Default:index.html.twig', $options);
     }
 
+
+    public function addFromNotificationAction($productId = self::NO_PRODUCT_ID)
+    {
+        /** @var Products $product */
+        $product = $this->getDoctrine()->getRepository('ShoppingListBundle:Products')->find($productId);
+        /** @var ProductService $productService */
+        $productService = $this->get(ProductService::ID);
+        $productService->saveProduct($product->getName());
+        $productsList = $productService->getShoppingListProducts();
+        $options = ['productsList' => $productsList];
+        return $this->render('ShoppingListBundle:Default:index.html.twig', $options);
+    }
+
     /**
      * @param Request $request
      * @return JsonResponse

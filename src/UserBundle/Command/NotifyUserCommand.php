@@ -107,7 +107,6 @@ class NotifyUserCommand extends Command implements ContainerAwareInterface
         }
         $job = trim($job);
 
-        $force = $input->getOption('force');
         $this->display($output, sprintf('Running %s', $job));
 
         if (!$this->service->run($input, $output)) {

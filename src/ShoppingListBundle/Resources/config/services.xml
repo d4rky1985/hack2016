@@ -20,6 +20,15 @@
             <call method="setProductService">
                 <argument type="service" id="hack2016.product.service"/>
             </call>
+            <call method="setNotifyService">
+                <argument type="service" id="notify.service"/>
+            </call>
+            <call method="setAppLink">
+                <argument>%app_link%</argument>
+            </call>
+            <call method="setRouter">
+                <argument type="service" id="router"/>
+            </call>
         </service>
     </services>
 </container>

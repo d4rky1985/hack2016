@@ -52,7 +52,7 @@ class FeelingMapping
      *
      * @return FeelingMapping
      */
-    public function setFbStatus(string $fbStatus)
+    public function setFbStatus($fbStatus)
     {
         $this->fbStatus = $fbStatus;
 
@@ -72,7 +72,7 @@ class FeelingMapping
      *
      * @return FeelingMapping
      */
-    public function setStatusGroup(string $statusGroup)
+    public function setStatusGroup($statusGroup)
     {
         $this->statusGroup = $statusGroup;
 

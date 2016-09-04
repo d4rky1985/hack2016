@@ -21,14 +21,6 @@ class ProductService
     protected $entityManager;
 
     /**
-     * @return EntityManager
-     */
-    public function getEntityManager()
-    {
-        return $this->entityManager;
-    }
-
-    /**
      * @param EntityManager $entityManager
      */
     public function setEntityManager($entityManager)
@@ -42,10 +34,10 @@ class ProductService
     public function getShoppingListProducts()
     {
         /** @var ProductsRepository $productsRepository */
-        $productsRepository = $this->getEntityManager()->getRepository('ShoppingListBundle:Products');
+        $productsRepository = $this->entityManager->getRepository('ShoppingListBundle:Products');
 
         /** @var ProductsBoughtRepository $productsBoughtRepository */
-        $productsBoughtRepository = $this->getEntityManager()
+        $productsBoughtRepository = $this->entityManager
             ->getRepository('ShoppingListBundle:ProductsBought');
 
         $shoppingListProducts = $productsRepository->getAllProducts();
@@ -81,7 +73,7 @@ class ProductService
     public function getProductByName($name)
     {
         /** @var Products $product */
-        $product = $this->getEntityManager()
+        $product = $this->entityManager
             ->getRepository('ShoppingListBundle:Products')
             ->findOneBy(array('name' => $name));
         if (is_null($product)) {
@@ -96,13 +88,13 @@ class ProductService
      * @param int $productId
      * @return Products
      */
-    public function getProductByReccomandation($productId)
+    public function getProductByRecommandation($productId)
     {
         /** @var ProductsSuggestions $recommandation */
         $recommandation = $this->getRecommendedProduct($productId);
 
         /** @var Products $product */
-        $product = $this->getEntityManager()
+        $product = $this->entityManager
             ->getRepository('ShoppingListBundle:Products')
             ->findOneBy(array('name' => $recommandation->getName()));
 
@@ -112,8 +104,6 @@ class ProductService
 
         $product = new Products();
         $product->setName($recommandation->getName());
-        $product->setShortDescription($recommandation->getShortDescription());
-        $product->setDescription($recommandation->getDescription());
         $product->setUrl($recommandation->getUrl());
         $product->setImage($recommandation->getImage());
 
@@ -124,28 +114,28 @@ class ProductService
      * @param $name
      * @param $productId
      */
-    public function saveProduct($name, $productId)
+    public function saveProduct($name, $productId = null)
     {
-        $product = $productId == 0 ? $this->getProductByName($name) : $this->getProductByReccomandation($productId);
+        $product = $productId == 0 ? $this->getProductByName($name) : $this->getProductByRecommandation($productId);
         $product->setStatus(Products::STATUS_NOT_BOUGHT);
-        $this->getEntityManager()->persist($product);
-        $this->getEntityManager()->flush();
+        $this->entityManager->persist($product);
+        $this->entityManager->flush();
     }
 
-    /**
+    /** 
      * @param $productId
      */
     public function productIsBought($productId) {
         /** @var ProductsRepository $productsRepository */
-        $productsRepository = $this->getEntityManager()->getRepository('ShoppingListBundle:Products');
+        $productsRepository = $this->entityManager->getRepository('ShoppingListBundle:Products');
 
         /** @var Products $product */
         $product = $productsRepository->find($productId);
 
         if ($product instanceof Products) {
             $product->setStatus(Products::STATUS_BOUGHT);
-            $this->getEntityManager()->persist($product);
-            $this->getEntityManager()->flush();
+            $this->entityManager->persist($product);
+            $this->entityManager->flush();
         }
     }
 
@@ -155,7 +145,7 @@ class ProductService
      */
     public function getRecommendedProduct($productId)
     {
-        $product = $this->getEntityManager()
+        $product = $this->entityManager
             ->getRepository('ShoppingListBundle:ProductsSuggestions')
             ->find($productId);
 
@@ -174,7 +164,7 @@ class ProductService
     public function getRecommendedNotificationProducts()
     {
         $productIds = array();
-        $products = $this->getEntityManager()
+        $products = $this->entityManager
             ->getRepository('ShoppingListBundle:Products')
             ->findAll();
 
@@ -195,7 +185,7 @@ class ProductService
      */
     public function getMustSendNotificationForProduct(Products $product)
     {
-        $boughts = $this->getEntityManager()
+        $boughts = $this->entityManager
             ->getRepository('ShoppingListBundle:ProductsBought')
             ->findBy(array('product' => $product), array('buyingDate' => 'DESC'));
         if (count($boughts) < 2) {
@@ -240,7 +230,7 @@ class ProductService
     public function getSortedShopingListProducts($shoppingListProducts)
     {
         /** @var ProductsBoughtRepository $productsBoughtRepository */
-        $productsBoughtRepository = $this->getEntityManager()->getRepository('ShoppingListBundle:ProductsBought');
+        $productsBoughtRepository = $this->entityManager->getRepository('ShoppingListBundle:ProductsBought');
 
         $productsBought = $productsBoughtRepository->getProductsBoughtOrder();
 
