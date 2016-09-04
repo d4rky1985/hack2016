@@ -117,7 +117,7 @@
                 <div style="padding:20px">
                     <p>{{ suggestedProduct.shortDescription }}</p>
                     {% if suggestedProduct.image != '' %}
-                        <p><img src="{{ suggestedProduct.image }}" style="width: 200px;"></p>
+                        <p style="text-align: center;"><img src="{{ suggestedProduct.image }}" style="width: 200px;"></p>
                     {% endif %}
                     <a href="{{ suggestedProduct.url }}" class="ui-btn ui-btn-b ui-shadow ui-corner-all">Buy now</a>
                     <a href="" id="btnPopupAddProduct" class="ui-btn ui-btn-b ui-shadow ui-corner-all">Add to wish list</a>
@@ -247,7 +247,7 @@
                         var $newProd =
                                 $('<li class="ui-li-has-alt ui-first-child ui-li-has-count ui-li-has-thumb" style="opacity: 0.1">' +
                                         '<a class="ui-btn" href="#demo-mail">' +
-                                        '<img src="' + prod.iamge + '">' +
+                                        '<div style="text-align: center;"><img src="' + prod.iamge + '"></div>' +
                                         '<h3>' + prod.name + '</h3>' +
                                         '<p>' + prod.shortDescription + '</p>' +
                                         '</a>' +
