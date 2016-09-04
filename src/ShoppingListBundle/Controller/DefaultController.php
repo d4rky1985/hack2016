@@ -46,14 +46,13 @@ class DefaultController extends Controller
      * @param $productId
      * @return JsonResponse
      */
-    public function addProductAjaxAction(Request $request)
+    public function addProductAjaxAction(Request $request, $productId = 0)
     {
         /** @var ProductService $productService */
         $productService = $this->get(ProductService::ID);
         try {
-            $productService->saveProduct(trim($request->request->get('product')));
+            $productService->saveProduct(trim($request->request->get('product', null)), $productId);
         } catch (\Exception $e){
-            print_r($e->getMessage());die;
             return new JsonResponse(array('success' => false));
         }
         return new JsonResponse(array('success' => true));
