@@ -21,4 +21,11 @@ class ProductsRepository extends EntityRepository
             ->setParameter('status', Products::STATUS_BOUGHT)
             ->getQuery()->getResult();
     }
+
+    public function getAllProducts() : array
+    {
+        return $this->createQueryBuilder('p')
+            ->addOrderBy('p.type', 'DESC')
+            ->getQuery()->getResult();
+    }
 }

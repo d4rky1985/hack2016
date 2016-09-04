@@ -13,6 +13,18 @@ use Doctrine\ORM\EntityRepository;
 class ProductsBoughtRepository extends EntityRepository
 {
     /**
+     * @param $productId
+     * @return int
+     */
+    public function getProductQuantity($productId)
+    {
+        return $this->createQueryBuilder('pb')
+            ->select('count(pb.id)')
+            ->where('pb.product = :productId')
+            ->setParameter('productId', $productId)
+            ->getQuery()->getSingleScalarResult();
+    }
+    /**
      * @return array
      */
     public function getProductsBoughtOrder()
