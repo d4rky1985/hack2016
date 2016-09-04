@@ -100,7 +100,7 @@
         <div role="main" class="ui-content jqm-content">
             <form class="ui-filterable">
                 <fieldset class="ui-grid-b">
-                    <div class="ui-block-b" style="width: 75%; margin-top:3px;">
+                    <div class="ui-block-b" style="width: 70%; margin:3px;">
                         <input id="autocomplete-input" data-type="search" placeholder="Add a product...">
                     </div>
                     <div class="ui-block-c" style="width: 25%">
@@ -233,6 +233,7 @@
                 });
                 $(document).on('click', ".add-product-to-list", function(){
                     addProduct($(this).html().trim());
+                    $('#autocomplete').html('');
                 });
 
                 function addProduct(product) {
@@ -243,7 +244,9 @@
                             dataType: "json",
                             data: { product: product }
                         }).then( function ( response ) {
-                            console.log(response);
+                            if (response.success == true) {
+                                $('#autocomplete-input').val('');
+                            }
                         });
                     }
                 }

@@ -3,6 +3,7 @@ namespace ShoppingListBundle\Service;
 
 use Doctrine\ORM\EntityManager;
 use ShoppingListBundle\Entity\Products;
+use ShoppingListBundle\Entity\ProductsSuggestions;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use ShoppingListBundle\Repository\ProductsRepository;
 
@@ -40,8 +41,9 @@ class ProductService
 
     /**
      * @param string $name
+     * @return Products
      */
-    public function saveProduct($name)
+    public function getProductByName($name)
     {
         /** @var Products $product */
         $product = $this->getEntityManager()
@@ -51,6 +53,47 @@ class ProductService
             $product = new Products();
             $product->setName($name);
         }
+
+        return $product;
+    }
+
+    /**
+     * @param int $productId
+     * @return Products
+     */
+    public function getProductByReccomandation($productId)
+    {
+        /** @var ProductsSuggestions $recommandation */
+        $recommandation = $this->getEntityManager()
+            ->getRepository('ShoppingListBundle:ProductsSuggestions')
+            ->find($productId);
+
+        /** @var Products $product */
+        $product = $this->getEntityManager()
+            ->getRepository('ShoppingListBundle:Products')
+            ->findOneBy(array('name' => $recommandation->getName()));
+
+        if (!is_null($product)) {
+            return $product;
+        }
+
+        $product = new Products();
+        $product->setName($recommandation->getName());
+        $product->setShortDescription($recommandation->getShortDescription());
+        $product->setDescription($recommandation->getDescription());
+        $product->setUrl($recommandation->getUrl());
+        $product->setImage($recommandation->getImage());
+
+        return $product;
+    }
+
+    /**
+     * @param $name
+     * @param $productId
+     */
+    public function saveProduct($name, $productId)
+    {
+        $product = $productId == 0 ? $this->getProductByName($name) : $this->getProductByReccomandation($productId);
         $product->setStatus(Products::STATUS_NOT_BOUGHT);
         $this->getEntityManager()->persist($product);
         $this->getEntityManager()->flush();
