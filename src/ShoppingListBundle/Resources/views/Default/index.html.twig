@@ -9,15 +9,6 @@
                 confirmAndDelete( listitem, transition );
             });
 
-            if ( ! $.mobile.support.touch ) {
-                $( "#list" ).removeClass( "touch" );
-                $( ".delete" ).on( "click", function() {
-                    var listitem = $( this ).parent( "li" );
-
-                    confirmAndDelete( listitem );
-                });
-            }
-
             function confirmAndDelete( listitem, transition ) {
                 listitem.children( ".ui-btn" ).addClass( "ui-btn-active" );
                 $( "#confirm .topic" ).remove();
