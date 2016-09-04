@@ -56,7 +56,12 @@ class ProductsSuggestions
      */
     private $id;
 
-
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="gender", type="string", length=10, nullable=true)
+     */
+    protected $gender;
 
     /**
      * Set name
@@ -168,6 +173,26 @@ class ProductsSuggestions
     public function setFeelingGroup($feelingGroup)
     {
         $this->feelingGroup = $feelingGroup;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * @param string $gender
+     *
+     * @return ProductsSuggestions
+     */
+    public function setGender(string $gender)
+    {
+        $this->gender = $gender;
 
         return $this;
     }

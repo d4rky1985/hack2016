@@ -26,6 +26,7 @@ class ProductsRepository extends EntityRepository
     {
         return $this->createQueryBuilder('p')
             ->addOrderBy('p.type', 'DESC')
+            ->addOrderBy('p.id', 'DESC')
             ->getQuery()->getResult();
     }
 }

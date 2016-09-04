@@ -24,4 +24,15 @@ class ProductsBoughtRepository extends EntityRepository
             ->setParameter('productId', $productId)
             ->getQuery()->getSingleScalarResult();
     }
+    /**
+     * @return array
+     */
+    public function getProductsBoughtOrder()
+    {
+        $qb = $this->createQueryBuilder('pb')
+            ->select('pb')
+            ->addOrderBy('pb.buyingDate', 'ASC');
+
+        return $qb->getQuery()->getResult();
+    }
 }

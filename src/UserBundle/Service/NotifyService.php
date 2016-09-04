@@ -7,6 +7,7 @@ use AppBundle\Repository\UserRepository;
 use Doctrine\ORM\EntityManager;
 use Facebook\Authentication\AccessToken;
 use ShoppingListBundle\Entity\ProductsSuggestions;
+use ShoppingListBundle\Repository\ProductsSuggestionsRepository;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -127,9 +128,6 @@ class NotifyService
 
         /** @var User $user */
         foreach ($usersToCheck as $user) {
-            if ($user->getId() == 1) {
-                continue;
-            }
             $accesToken = new AccessToken($user->getFbToken());
 
             try {
@@ -184,10 +182,26 @@ class NotifyService
         return false;
     }
 
-    //todo docblock
+    /**
+     * @param User $user
+     * @param FeelingMapping $feelingMapping
+     */
     public function notifyUser($user, $feelingMapping)
     {
-        //todo notify user by push up
+        /** @var ProductsSuggestionsRepository $productSuggentionRepository */
+        $productSuggentionRepository = $this->entityManager->getRepository('ShoppingListBundle:ProductsSuggestions');
+
+        $productsSuggention = $productSuggentionRepository->findBy(
+            array(
+                'feelingGroup' => $feelingMapping->getStatusGroup(),
+                'gender' => $user->getSex()
+            )
+        );
+        shuffle($productsSuggention);
+
+        $productSuggention = $productsSuggention[0];
+
+        $this->sendPushNotification($user->getPushToken(), $productSuggention);
     }
 
     /**
