@@ -36,7 +36,7 @@ class DefaultController extends Controller
     }
 
 
-    public function addFromNotificationAction($productId = self::NO_PRODUCT_ID)
+    public function addFromNotificationAction($productId = Products::NO_PRODUCT_ID)
     {
         /** @var Products $product */
         $product = $this->getDoctrine()->getRepository('ShoppingListBundle:Products')->find($productId);
