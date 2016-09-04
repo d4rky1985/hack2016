@@ -46,7 +46,7 @@ class ProductService
         $productsBoughtRepository = $this->getEntityManager()
             ->getRepository('ShoppingListBundle:ProductsBought');
 
-        $shoppingListProducts = $productsRepository->findAll();
+        $shoppingListProducts = $productsRepository->getAllProducts();
 
         $productsListNotBought = [];
         $productsListBought = [];
@@ -60,6 +60,7 @@ class ProductService
                 'description' => $product->getDescription(),
                 'image' => $product->getImage(),
                 'quantity' => $productsBoughtRepository->getProductQuantity($product->getId()),
+                'type' => $product->getType(),
             ];
             if($product->getStatus() == Products::STATUS_NOT_BOUGHT) {
                 $productsListNotBought[] = $productData;

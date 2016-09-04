@@ -153,8 +153,9 @@
                         <p>{{ product.description }}</p>
                         <span class="ui-li-count">{{ product.quantity }}</span>
                     </a>
-                    <a title="Remove from favorites" href="#" class="delete ui-btn ui-btn-icon-notext
-                    ui-icon-star"></a>
+                    {% if product.type %}
+                    <a title="Remove from favorites" href="#" class="delete ui-btn ui-btn-icon-notext ui-icon-star"></a>
+                    {% endif %}
                 </li>
                 {% endfor %}
                 <li><strong>Already Bought</strong></li>
@@ -167,8 +168,9 @@
                             <p>{{ product.description }}</p>
                             <span class="ui-li-count">{{ product.quantity }}</span>
                         </a>
-                        <a title="Remove from favorites" href="#" class="delete ui-btn ui-btn-icon-notext
-                    ui-icon-star"></a>
+                        {% if product.type %}
+                            <a title="Remove from favorites" href="#" class="delete ui-btn ui-btn-icon-notext ui-icon-star"></a>
+                        {% endif %}
                     </li>
                 {% endfor %}
             </ul>
