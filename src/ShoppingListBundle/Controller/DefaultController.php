@@ -75,4 +75,19 @@ class DefaultController extends Controller
         }
         return new JsonResponse(array('success' => true));
     }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function productBoughtAjaxAction(Request $request) {
+        /** @var ProductService $productService */
+        $productService = $this->get(ProductService::ID);
+        try {
+            $productService->productIsBought(trim($request->request->get('product', null)));
+        } catch (\Exception $e){
+            return new JsonResponse(array('success' => false));
+        }
+        return new JsonResponse(array('success' => true));
+    }
 }

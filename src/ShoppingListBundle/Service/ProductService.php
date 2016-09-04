@@ -3,9 +3,9 @@ namespace ShoppingListBundle\Service;
 
 use Doctrine\ORM\EntityManager;
 use ShoppingListBundle\Entity\Products;
+use ShoppingListBundle\Repository\ProductsBoughtRepository;
 use ShoppingListBundle\Entity\ProductsBought;
 use ShoppingListBundle\Entity\ProductsSuggestions;
-use ShoppingListBundle\Repository\ProductsBoughtRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use ShoppingListBundle\Repository\ProductsRepository;
 
@@ -39,7 +39,8 @@ class ProductService
     /**
      * @return array
      */
-    public function getShoppingListProducts() {
+    public function getShoppingListProducts()
+    {
         /** @var ProductsRepository $productsRepository */
         $productsRepository = $this->getEntityManager()->getRepository('ShoppingListBundle:Products');
 
@@ -49,11 +50,13 @@ class ProductService
 
         $shoppingListProducts = $productsRepository->getAllProducts();
 
+        $shoppingListProducts = $this->getSortedShopingListProducts($shoppingListProducts);
+
         $productsListNotBought = [];
         $productsListBought = [];
 
         /** @var Products $product */
-        foreach($shoppingListProducts as $product) {
+        foreach ($shoppingListProducts as $product) {
             $productData = [
                 'id' => $product->getId(),
                 'name' => $product->getName(),
@@ -61,7 +64,7 @@ class ProductService
                 'quantity' => $productsBoughtRepository->getProductQuantity($product->getId()),
                 'type' => $product->getType(),
             ];
-            if($product->getStatus() == Products::STATUS_NOT_BOUGHT) {
+            if ($product->getStatus() == Products::STATUS_NOT_BOUGHT) {
                 $productsListNotBought[] = $productData;
                 continue;
             }
@@ -125,6 +128,23 @@ class ProductService
         $product->setStatus(Products::STATUS_NOT_BOUGHT);
         $this->getEntityManager()->persist($product);
         $this->getEntityManager()->flush();
+    }
+
+    /**
+     * @param $productId
+     */
+    public function productIsBought($productId) {
+        /** @var ProductsRepository $productsRepository */
+        $productsRepository = $this->getEntityManager()->getRepository('ShoppingListBundle:Products');
+
+        /** @var Products $product */
+        $product = $productsRepository->find($productId);
+
+        if ($product instanceof Products) {
+            $product->setStatus(Products::STATUS_BOUGHT);
+            $this->getEntityManager()->persist($product);
+            $this->getEntityManager()->flush();
+        }
     }
 
     /**
@@ -208,5 +228,65 @@ class ProductService
         }
 
         return (int)(array_sum($days)/count($days));
+    }
+
+    /**
+     * @param $shoppingListProducts
+     *
+     * @return array
+     */
+    public function getSortedShopingListProducts($shoppingListProducts)
+    {
+        /** @var ProductsBoughtRepository $productsBoughtRepository */
+        $productsBoughtRepository = $this->getEntityManager()->getRepository('ShoppingListBundle:ProductsBought');
+
+        $productsBought = $productsBoughtRepository->getProductsBoughtOrder();
+
+        $products = array();
+
+        /** @var ProductsBought $productBought */
+        foreach ($productsBought as $productBought) {
+            if ($productBought->getParent() instanceof Products) {
+                $products[$productBought->getParent()->getId()] = $productBought->getProduct();
+            }
+        }
+
+        $productsBought = array();
+        $productsNotBought = array();
+        $sortedProducts = array();
+        /** @var Products $product */
+        foreach ($shoppingListProducts as $product) {
+            if ($product->getStatus() == Products::STATUS_NOT_BOUGHT) {
+                $productsNotBought[] = $product;
+                if ($product->getType() == Products::TYPE_FAV) {
+                    $sortedProducts[] = $product;
+                } else {
+                    continue;
+                }
+            } else {
+                $productsBought[] = $product;
+            }
+        }
+
+        /**
+         * @var int $productId
+         * @var Products $product
+         */
+        foreach ($products as $productId => $product) {
+            if (in_array($product, $productsNotBought) && !in_array($product, $sortedProducts)) {
+                $sortedProducts[] = $product;
+            }
+        }
+
+        /** @var Products $product */
+        foreach ($productsNotBought as $product) {
+            if (!in_array($product, $sortedProducts)) {
+                $sortedProducts[] = $product;
+            }
+        }
+
+        $sortedProducts = array_merge($sortedProducts, $productsBought);
+
+        return $sortedProducts;
     }
 }
