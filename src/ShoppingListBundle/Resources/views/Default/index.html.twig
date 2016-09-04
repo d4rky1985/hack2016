@@ -9,15 +9,6 @@
                 confirmAndDelete( listitem, transition );
             });
 
-            if ( ! $.mobile.support.touch ) {
-                $( "#list" ).removeClass( "touch" );
-                $( ".delete" ).on( "click", function() {
-                    var listitem = $( this ).parent( "li" );
-
-                    confirmAndDelete( listitem );
-                });
-            }
-
             function confirmAndDelete( listitem, transition ) {
                 listitem.children( ".ui-btn" ).addClass( "ui-btn-active" );
                 $( "#confirm .topic" ).remove();
@@ -40,7 +31,6 @@
                                     }).then( function ( response ) {
                                         var listitemtemp = listitem;
                                         listitem.remove();
-                                        console.log(listitemtemp);
                                         listitemtemp.removeClass("right");
                                         $("#list").append(listitemtemp);
                                         $( "#list" ).listview( "refresh" ).find( ".border-bottom" ).removeClass( "border-bottom" );
@@ -50,7 +40,6 @@
                                 .end().end().children( ".ui-btn" ).removeClass( "ui-btn-active" );
                     }
                     else {
-
                         listitem.remove();
                         $( "#list" ).listview( "refresh" );
                     }
@@ -156,7 +145,7 @@
                 <li class="ui-li-has-alt ui-first-child">
                     <input type="text" class="ui-screen-hidden" hidden value="{{ product.id }}">
                     <a class="ui-btn" href="#demo-mail">
-                        <img src="../_assets/img/album-bb.jpg">
+                        <img src="{{ product.image }}">
                         <h3>{{ product.name }}</h3>
                         <span class="ui-li-count">{{ product.quantity }}</span>
                     </a>
@@ -167,11 +156,11 @@
                     {% endif %}
                 </li>
                 {% endfor %}
-                <li><strong>Already Bought</strong></li>
+                <li id="li-separator"><strong>Already Bought</strong></li>
                 {% for product in productsList.productsListBought %}
                     <li class="ui-li-has-alt ui-first-child">
                         <a class="ui-btn" href="#demo-mail">
-                            <img src="../_assets/img/album-bb.jpg">
+                            <img src="{{ product.image }}">
                             <h3>{{ product.name }}</h3>
                             <span class="ui-li-count">{{ product.quantity }}</span>
                         </a>

@@ -129,6 +129,9 @@ class ProductService
         $this->getEntityManager()->flush();
     }
 
+    /**
+     * @param $productId
+     */
     public function productIsBought($productId) {
         /** @var ProductsRepository $productsRepository */
         $productsRepository = $this->getEntityManager()->getRepository('ShoppingListBundle:Products');
@@ -138,7 +141,6 @@ class ProductService
 
         if ($product instanceof Products) {
             $product->setStatus(Products::STATUS_BOUGHT);
-            $product->setType(Products::MANUAL_PRODUCT_TYPE);
             $this->getEntityManager()->persist($product);
             $this->getEntityManager()->flush();
         }
