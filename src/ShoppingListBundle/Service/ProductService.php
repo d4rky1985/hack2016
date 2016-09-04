@@ -134,12 +134,12 @@ class ProductService
 
     /**
      * @param $productId
-     * @return null|object
+     * @return ProductsSuggestions
      */
     public function getRecommendedProduct($productId)
     {
         $product = $this->getEntityManager()
-            ->getRepository('ShoppingListBundle:ProductSuggestion')
+            ->getRepository('ShoppingListBundle:ProductsSuggestions')
             ->find($productId);
 
         if (empty($product)) {
