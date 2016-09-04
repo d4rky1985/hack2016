@@ -7,7 +7,6 @@ use AppBundle\Repository\UserRepository;
 use Doctrine\ORM\EntityManager;
 use Facebook\Authentication\AccessToken;
 use ShoppingListBundle\Entity\ProductsSuggestions;
-use ShoppingListBundle\Repository\ProductsSuggestionsRepository;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,6 +37,24 @@ class NotifyService
 
     /** @var Router */
     protected $router;
+
+    protected $appLink;
+
+    /**
+     * @return mixed
+     */
+    public function getAppLink()
+    {
+        return $this->appLink;
+    }
+
+    /**
+     * @param mixed $appLink
+     */
+    public function setAppLink($appLink)
+    {
+        $this->appLink = $appLink;
+    }
 
     /**
      * @return Router
@@ -214,13 +231,14 @@ class NotifyService
             array(
                 'feelingGroup' => $feelingMapping->getStatusGroup(),
                 'gender' => $user->getSex()
-            )
-        );
+                )
+            );
         shuffle($productsSuggention);
 
         $productSuggention = $productsSuggention[0];
 
         $this->sendPushNotification($user->getPushToken(), $productSuggention);
+
     }
 
     /**
@@ -262,6 +280,7 @@ class NotifyService
             $message = $product->getShortDescription();
         }
         if (is_null($url)) {
+            $this->getRouter()->getContext()->setBaseUrl($this->getAppLink());
             $url = $this->getRouter()->generate('shopping_list_default', array('productId' => $product->getId()));
         }
         $fields = array

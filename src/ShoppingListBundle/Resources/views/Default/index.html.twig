@@ -9,6 +9,15 @@
                 confirmAndDelete( listitem, transition );
             });
 
+            if ( ! $.mobile.support.touch ) {
+                $( "#list" ).removeClass( "touch" );
+                $( ".delete" ).on( "click", function() {
+                    var listitem = $( this ).parent( "li" );
+
+                    confirmAndDelete( listitem );
+                });
+            }
+
             function confirmAndDelete( listitem, transition ) {
                 listitem.children( ".ui-btn" ).addClass( "ui-btn-active" );
                 $( "#confirm .topic" ).remove();
@@ -20,21 +29,8 @@
                         listitem
                                 .addClass( transition )
                                 .on( "webkitTransitionEnd transitionend otransitionend", function() {
-
-                                    $.ajax({
-                                        method: "POST",
-                                        url: "{{ path('product_is_bought') }}",
-                                        dataType: "json",
-                                        data: {
-                                            product: listitem.find( "input" ).val()
-                                        }
-                                    }).then( function ( response ) {
-                                        var listitemtemp = listitem;
-                                        listitem.remove();
-                                        listitemtemp.removeClass("right");
-                                        $("#list").append(listitemtemp);
-                                        $( "#list" ).listview( "refresh" ).find( ".border-bottom" ).removeClass( "border-bottom" );
-                                    });
+                                    listitem.remove();
+                                    $( "#list" ).listview( "refresh" ).find( ".border-bottom" ).removeClass( "border-bottom" );
                                 })
                                 .prev( "li" ).children( "a" ).addClass( "border-bottom" )
                                 .end().end().children( ".ui-btn" ).removeClass( "ui-btn-active" );
@@ -143,9 +139,8 @@
                 data-split-icon="delete">
                 {% for product in productsList.productsListNotBought %}
                 <li class="ui-li-has-alt ui-first-child">
-                    <input type="text" class="ui-screen-hidden" hidden value="{{ product.id }}">
                     <a class="ui-btn" href="#demo-mail">
-                        <img src="{{ product.image }}">
+                        <img src="../_assets/img/album-bb.jpg">
                         <h3>{{ product.name }}</h3>
                         <span class="ui-li-count">{{ product.quantity }}</span>
                     </a>
@@ -156,11 +151,11 @@
                     {% endif %}
                 </li>
                 {% endfor %}
-                <li id="li-separator"><strong>Already Bought</strong></li>
+                <li><strong>Already Bought</strong></li>
                 {% for product in productsList.productsListBought %}
                     <li class="ui-li-has-alt ui-first-child">
                         <a class="ui-btn" href="#demo-mail">
-                            <img src="{{ product.image }}">
+                            <img src="../_assets/img/album-bb.jpg">
                             <h3>{{ product.name }}</h3>
                             <span class="ui-li-count">{{ product.quantity }}</span>
                         </a>
@@ -252,9 +247,8 @@
                         var $newProd =
                                 $('<li class="ui-li-has-alt ui-first-child ui-li-has-count ui-li-has-thumb" style="opacity: 0.1">' +
                                         '<a class="ui-btn" href="#demo-mail">' +
-                                        '<div style="text-align: center;"><img src="' + prod.iamge + '"></div>' +
+                                        '<img src="' + prod.iamge + '">' +
                                         '<h3>' + prod.name + '</h3>' +
-                                        '<p>' + prod.shortDescription + '</p>' +
                                         '</a>' +
                                         '<a title="Remove from favorites" href="#" class="delete ui-btn ui-btn-icon-notext ui-icon-star"></a>' +
                                         '</li>');
