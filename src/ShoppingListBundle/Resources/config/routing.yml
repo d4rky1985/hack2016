@@ -1,6 +1,8 @@
 shopping_list_default:
-    path:     /
-    defaults: { _controller: ShoppingListBundle:Default:index }
+    path:     /{productId}
+    defaults: { _controller: ShoppingListBundle:Default:index, productId: 0 }
+    requirements:
+        productId: '\d+'
     options:
         expose: true
 
@@ -9,8 +11,10 @@ shopping_search_products_default:
     defaults: { _controller: ShoppingListBundle:Default:searchProducts }
 
 shopping_list_add_product_ajax:
-    path:     /add-product
-    defaults: { _controller: ShoppingListBundle:Default:addProductAjax }
+    path:     /add-product/{productId}
+    defaults: { _controller: ShoppingListBundle:Default:addProductAjax, productId: 0 }
     methods:  [POST]
+    requirements:
+        productId: '\d+'
     options:
         expose: true
