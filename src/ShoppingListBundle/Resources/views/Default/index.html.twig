@@ -143,11 +143,12 @@
                         <img src="../_assets/img/album-bb.jpg">
                         <h3>{{ product.name }}</h3>
                         <p><strong>{{ product.short_description }}</strong></p>
-                        <p>{{ product.description }}</p>
                         <span class="ui-li-count">{{ product.quantity }}</span>
                     </a>
                     {% if product.type %}
-                    <a title="Remove from favorites" href="#" class="delete ui-btn ui-btn-icon-notext ui-icon-star"></a>
+                        <a title="Remove from favorites" href="#" class="delete ui-btn ui-btn-icon-notext ui-icon-star"></a>
+                    {% else %}
+                        <a href="#" class="ui-btn"></a>
                     {% endif %}
                 </li>
                 {% endfor %}
@@ -158,11 +159,12 @@
                             <img src="../_assets/img/album-bb.jpg">
                             <h3>{{ product.name }}</h3>
                             <p><strong>{{ product.short_description }}</strong></p>
-                            <p>{{ product.description }}</p>
                             <span class="ui-li-count">{{ product.quantity }}</span>
                         </a>
                         {% if product.type %}
                             <a title="Remove from favorites" href="#" class="delete ui-btn ui-btn-icon-notext ui-icon-star"></a>
+                        {% else %}
+                            <a href="#" class="ui-btn"></a>
                         {% endif %}
                     </li>
                 {% endfor %}
