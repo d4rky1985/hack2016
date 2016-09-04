@@ -257,7 +257,7 @@ class NotifyService
             'token'     => $this->pushNotificationToken,
             'user'      => $userPushToken,
             'message'   => $message,
-            'title'     => "Wish Tellers",
+            'title'     => "Wish Teller",
             'url_title' => 'View more details',
             'url'       => $url,
         );
