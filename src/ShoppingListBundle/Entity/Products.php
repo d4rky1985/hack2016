@@ -14,6 +14,9 @@ class Products
 {
     const STATUS_BOUGHT = 1;
     const STATUS_NOT_BOUGHT = 0;
+
+    const TYPE_FAV = 1;
+    const TYPE_NOT_FAV = 0;
     /**
      * @var string
      *

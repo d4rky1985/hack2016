@@ -39,7 +39,8 @@ class ProductService
     /**
      * @return array
      */
-    public function getShoppingListProducts() {
+    public function getShoppingListProducts()
+    {
         /** @var ProductsRepository $productsRepository */
         $productsRepository = $this->getEntityManager()->getRepository('ShoppingListBundle:Products');
 
@@ -49,11 +50,13 @@ class ProductService
 
         $shoppingListProducts = $productsRepository->getAllProducts();
 
+        $shoppingListProducts = $this->getSortedShopingListProducts($shoppingListProducts);
+
         $productsListNotBought = [];
         $productsListBought = [];
 
         /** @var Products $product */
-        foreach($shoppingListProducts as $product) {
+        foreach ($shoppingListProducts as $product) {
             $productData = [
                 'id' => $product->getId(),
                 'name' => $product->getName(),
@@ -61,7 +64,7 @@ class ProductService
                 'quantity' => $productsBoughtRepository->getProductQuantity($product->getId()),
                 'type' => $product->getType(),
             ];
-            if($product->getStatus() == Products::STATUS_NOT_BOUGHT) {
+            if ($product->getStatus() == Products::STATUS_NOT_BOUGHT) {
                 $productsListNotBought[] = $productData;
                 continue;
             }
@@ -148,7 +151,12 @@ class ProductService
         return $product;
     }
 
-    public function getSortedShopingListProducts()
+    /**
+     * @param $shoppingListProducts
+     *
+     * @return array
+     */
+    public function getSortedShopingListProducts($shoppingListProducts)
     {
         /** @var ProductsBoughtRepository $productsBoughtRepository */
         $productsBoughtRepository = $this->getEntityManager()->getRepository('ShoppingListBundle:ProductsBought');
@@ -159,9 +167,47 @@ class ProductService
 
         /** @var ProductsBought $productBought */
         foreach ($productsBought as $productBought) {
-            $products[$productBought->getParent()->getId()] = $productBought->getProduct();
+            if ($productBought->getParent() instanceof Products) {
+                $products[$productBought->getParent()->getId()] = $productBought->getProduct();
+            }
         }
-        //todo show products sorted
 
+        $productsBought = array();
+        $productsNotBought = array();
+        $sortedProducts = array();
+        /** @var Products $product */
+        foreach ($shoppingListProducts as $product) {
+            if ($product->getStatus() == Products::STATUS_NOT_BOUGHT) {
+                $productsNotBought[] = $product;
+                if ($product->getType() == Products::TYPE_FAV) {
+                    $sortedProducts[] = $product;
+                } else {
+                    continue;
+                }
+            } else {
+                $productsBought[] = $product;
+            }
+        }
+
+        /**
+         * @var int $productId
+         * @var Products $product
+         */
+        foreach ($products as $productId => $product) {
+            if (in_array($product, $productsNotBought) && !in_array($product, $sortedProducts)) {
+                $sortedProducts[] = $product;
+            }
+        }
+
+        /** @var Products $product */
+        foreach ($productsNotBought as $product) {
+            if (!in_array($product, $sortedProducts)) {
+                $sortedProducts[] = $product;
+            }
+        }
+
+        $sortedProducts = array_merge($sortedProducts, $productsBought);
+
+        return $sortedProducts;
     }
 }
