@@ -114,10 +114,9 @@ class ProductService
 
         $product = new Products();
         $product->setName($recommandation->getName());
-        $product->setShortDescription($recommandation->getShortDescription());
-        $product->setDescription($recommandation->getDescription());
         $product->setUrl($recommandation->getUrl());
         $product->setImage($recommandation->getImage());
+        $product->setType(Products::SUGGESTED_PRODUCT_TYPE);
 
         return $product;
     }
