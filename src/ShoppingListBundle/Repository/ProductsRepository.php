@@ -18,7 +18,7 @@ class ProductsRepository extends EntityRepository
             ->where('p.name LIKE :name')
             ->setParameter('name', '%' . $name . '%')
             ->andWhere('p.status LIKE :status')
-            ->setParameter('status', Products::STATUS_NOT_BOUGHT)
+            ->setParameter('status', Products::STATUS_BOUGHT)
             ->getQuery()->getResult();
     }
 }
