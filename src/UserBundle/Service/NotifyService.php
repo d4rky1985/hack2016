@@ -35,6 +35,25 @@ class NotifyService
     /** @var  string */
     protected $pushNotificationServer;
 
+    /** @var Router */
+    protected $router;
+
+    /**
+     * @return Router
+     */
+    public function getRouter()
+    {
+        return $this->router;
+    }
+
+    /**
+     * @param Router $router
+     */
+    public function setRouter($router)
+    {
+        $this->router = $router;
+    }
+
     /**
      * @return mixed
      */
@@ -223,16 +242,22 @@ class NotifyService
      * @param ProductsSuggestions $product
      * @return bool
      */
-    public function sendPushNotification($userPushToken, ProductsSuggestions $product) : bool
+    public function sendPushNotification($userPushToken, $product, $message = null, $url = null) : bool
     {
+        if (is_null($message)) {
+            $message = $product->getShortDescription();
+        }
+        if (is_null($url)) {
+            $url = $this->getRouter()->generate('shopping_list_default', array('productId' => $product->getId()));
+        }
         $fields = array
         (
             'token'     => $this->getPushNotificationToken(),
             'user'      => $userPushToken,
-            'message'   => $product->getShortDescription(),
+            'message'   => $message,
             'title'     => "Wish Tellers",
             'url_title' => 'View more details',
-            'url'       => $product->getUrl(),
+            'url'       => $url,
         );
 
         $ch = curl_init();

@@ -109,8 +109,6 @@ class ProductService
 
         $product = new Products();
         $product->setName($recommandation->getName());
-        $product->setShortDescription($recommandation->getShortDescription());
-        $product->setDescription($recommandation->getDescription());
         $product->setUrl($recommandation->getUrl());
         $product->setImage($recommandation->getImage());
 
@@ -121,7 +119,7 @@ class ProductService
      * @param $name
      * @param $productId
      */
-    public function saveProduct($name, $productId)
+    public function saveProduct($name, $productId = null)
     {
         $product = $productId == 0 ? $this->getProductByName($name) : $this->getProductByReccomandation($productId);
         $product->setStatus(Products::STATUS_NOT_BOUGHT);

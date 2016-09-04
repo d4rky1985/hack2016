@@ -1,3 +1,11 @@
+shopping_list_notification_default:
+    path:     /notification/{productId}
+    defaults: { _controller: ShoppingListBundle:Default:addFromNotification, productId: 0 }
+    requirements:
+        productId: '\d+'
+    options:
+        expose: true
+
 shopping_list_default:
     path:     /{productId}
     defaults: { _controller: ShoppingListBundle:Default:index, productId: 0 }
