@@ -66,6 +66,13 @@ class Products
     /**
      * @var integer
      *
+     * @ORM\Column(name="type", type="integer")
+     */
+    private $type;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -231,4 +238,25 @@ class Products
     {
         $this->status = $status;
     }
+
+    /**
+     * @return int
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param int $type
+     *
+     * @return Products
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
 }

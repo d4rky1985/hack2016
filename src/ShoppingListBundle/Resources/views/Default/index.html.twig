@@ -144,38 +144,33 @@
 
             <ul id="list" data-count-theme="b" class="ui-listview" data-role="listview" data-icon="false"
                 data-split-icon="delete">
+                {% for product in productsList.productsListNotBought %}
                 <li class="ui-li-has-alt ui-first-child">
                     <a class="ui-btn" href="#demo-mail">
                         <img src="../_assets/img/album-bb.jpg">
-                        <h3>Produs 1</h3>
-                        <p><strong>Short description</strong></p>
-                        <p>Long description blah blah blah blah blah blah blah</p>
-                        <span class="ui-li-count">12</span>
+                        <h3>{{ product.name }}</h3>
+                        <p><strong>{{ product.short_description }}</strong></p>
+                        <p>{{ product.description }}</p>
+                        <span class="ui-li-count">{{ product.quantity }}</span>
                     </a>
                     <a title="Remove from favorites" href="#" class="delete ui-btn ui-btn-icon-notext
                     ui-icon-star"></a>
                 </li>
-                <li class="ui-li-has-alt">
-                    <a class="ui-btn" href="#demo-mail">
-                        <img src="../_assets/img/album-bb.jpg">
-                        <h3>Produs 2</h3>
-                        <p><strong>Short description</strong></p>
-                        <p>Long description blah blah blah blah blah blah blah</p>
-                        <span class="ui-li-count">35</span>
-                    </a>
-                    <a title="Remove from favorites" href="#" class="delete ui-btn ui-btn-icon-notext
+                {% endfor %}
+                <li><strong>Already Bought</strong></li>
+                {% for product in productsList.productsListBought %}
+                    <li class="ui-li-has-alt ui-first-child">
+                        <a class="ui-btn" href="#demo-mail">
+                            <img src="../_assets/img/album-bb.jpg">
+                            <h3>{{ product.name }}</h3>
+                            <p><strong>{{ product.short_description }}</strong></p>
+                            <p>{{ product.description }}</p>
+                            <span class="ui-li-count">{{ product.quantity }}</span>
+                        </a>
+                        <a title="Remove from favorites" href="#" class="delete ui-btn ui-btn-icon-notext
                     ui-icon-star"></a>
-                </li>
-                <li class="ui-li-has-alt">
-                    <a class="ui-btn" href="#demo-mail">
-                        <img src="../_assets/img/album-bb.jpg">
-                        <h3>Produs 2</h3>
-                        <p><strong>Short description</strong></p>
-                        <p>Long description blah blah blah blah blah blah blah</p>
-                        <span class="ui-li-count">35</span>
-                    </a>
-                    <a href="#" class="ui-btn"></a>
-                </li>
+                    </li>
+                {% endfor %}
             </ul>
 
             <div id="confirm-placeholder" style="display: none;"><!-- placeholder for confirm --></div><!-- /popup -->

@@ -14,9 +14,17 @@ class DefaultController extends Controller
     public function indexAction($productId = self::NO_PRODUCT_ID)
     {
 
+        /** @var ProductService $productService */
+        $productService = $this->get(ProductService::ID);
+
+        $productsList = $productService->getShoppingListProducts();
+
         return $this->render(
             'ShoppingListBundle:Default:index.html.twig',
-            ['productId' => $productId]
+            [
+                'productId' => $productId,
+                'productsList' => $productsList,
+            ]
         );
     }
 
@@ -41,7 +49,7 @@ class DefaultController extends Controller
     public function addProductAjaxAction(Request $request)
     {
         /** @var ProductService $productService */
-        $productService = $this->get('hack2016.product.service');
+        $productService = $this->get(ProductService::ID);
         try {
             $productService->saveProduct(trim($request->request->get('product')));
         } catch (\Exception $e){
