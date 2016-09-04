@@ -9,6 +9,15 @@
                 confirmAndDelete( listitem, transition );
             });
 
+            if ( ! $.mobile.support.touch ) {
+                $( "#list" ).removeClass( "touch" );
+                $( ".delete" ).on( "click", function() {
+                    var listitem = $( this ).parent( "li" );
+
+                    confirmAndDelete( listitem );
+                });
+            }
+
             function confirmAndDelete( listitem, transition ) {
                 listitem.children( ".ui-btn" ).addClass( "ui-btn-active" );
                 $( "#confirm .topic" ).remove();
@@ -157,7 +166,7 @@
                     {% endif %}
                 </li>
                 {% endfor %}
-                <li id="li-separator"><strong>Already Bought</strong></li><strong>Already Bought</strong></li>
+                <li id="li-separator"><strong>Already Bought</strong></li>
                 {% for product in productsList.productsListBought %}
                     <li class="ui-li-has-alt ui-first-child">
                         <a class="ui-btn" href="#demo-mail">
