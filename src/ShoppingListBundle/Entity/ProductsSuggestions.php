@@ -29,13 +29,6 @@ class ProductsSuggestions
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="text", length=65535, nullable=true)
-     */
-    private $description;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="url", type="string", length=255, nullable=false)
      */
     private $url;
@@ -48,9 +41,9 @@ class ProductsSuggestions
     private $image;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="feeling_group", type="integer")
+     * @ORM\Column(name="feeling_group", type="string", length=100, nullable=true)
      */
     private $feelingGroup;
 
@@ -109,31 +102,7 @@ class ProductsSuggestions
         return $this;
     }
 
-    /**
-     * Set description
-     *
-     * @param string $description
-     *
-     * @return ProductsSuggestions
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
+     /**
      * Get id
      *
      * @return integer
@@ -184,7 +153,7 @@ class ProductsSuggestions
     }
 
     /**
-     * @return int
+     * @return string
      */
     public function getFeelingGroup()
     {
@@ -192,7 +161,7 @@ class ProductsSuggestions
     }
 
     /**
-     * @param int $feelingGroup
+     * @param string $feelingGroup
      *
      * @return ProductsSuggestions
      */
