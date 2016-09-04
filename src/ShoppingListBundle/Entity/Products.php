@@ -31,20 +31,6 @@ class Products
     /**
      * @var string
      *
-     * @ORM\Column(name="short_description", type="text", length=65535, nullable=true)
-     */
-    private $shortDescription;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="description", type="text", length=65535, nullable=true)
-     */
-    private $description;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="url", type="string", length=255, nullable=false)
      */
     private $url;
@@ -129,51 +115,7 @@ class Products
         return $this->price;
     }
 
-    /**
-     * @return string
-     */
-    public function getShortDescription()
-    {
-        return $this->shortDescription;
-    }
-
-    /**
-     * @param string $shortDescription
-     *
-     * @return Products
-     */
-    public function setShortDescription($shortDescription)
-    {
-        $this->shortDescription = $shortDescription;
-
-        return $this;
-    }
-
-    /**
-     * Set description
-     *
-     * @param string $description
-     *
-     * @return Products
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
+     /**
      * Get id
      *
      * @return integer
