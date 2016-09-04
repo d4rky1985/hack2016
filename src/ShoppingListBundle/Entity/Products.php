@@ -14,6 +14,9 @@ class Products
 {
     const STATUS_BOUGHT = 1;
     const STATUS_NOT_BOUGHT = 0;
+    const SUGGESTED_PRODUCT_TYPE = 1;
+    const MANUAL_PRODUCT_TYPE = 0;
+
     /**
      * @var string
      *
@@ -68,7 +71,7 @@ class Products
      *
      * @ORM\Column(name="type", type="integer")
      */
-    private $type;
+    private $type = self::MANUAL_PRODUCT_TYPE;
 
     /**
      * @var integer
