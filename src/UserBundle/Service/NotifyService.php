@@ -6,6 +6,7 @@ use AppBundle\Entity\User;
 use AppBundle\Repository\UserRepository;
 use Doctrine\ORM\EntityManager;
 use Facebook\Authentication\AccessToken;
+use ShoppingListBundle\Entity\ProductsSuggestions;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,6 +28,44 @@ class NotifyService
 
     /** @var  UserService */
     protected $userService;
+
+    /** @var  string */
+    protected $pushNotificationToken;
+
+    /** @var  string */
+    protected $pushNotificationServer;
+
+    /**
+     * @return mixed
+     */
+    public function getPushNotificationToken()
+    {
+        return $this->pushNotificationToken;
+    }
+
+    /**
+     * @param mixed $pushNotificationToken
+     */
+    public function setPushNotificationToken($pushNotificationToken)
+    {
+        $this->pushNotificationToken = $pushNotificationToken;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPushNotificationServer()
+    {
+        return $this->pushNotificationServer;
+    }
+
+    /**
+     * @param string $pushNotificationServer
+     */
+    public function setPushNotificationServer($pushNotificationServer)
+    {
+        $this->pushNotificationServer = $pushNotificationServer;
+    }
 
     /**
      * @param InputInterface $input
@@ -177,5 +216,32 @@ class NotifyService
     public function setUserService(UserService $userService)
     {
         $this->userService = $userService;
+    }
+
+    /**
+     * @param $userPushToken
+     * @param ProductsSuggestions $product
+     * @return bool
+     */
+    public function sendPushNotification($userPushToken, ProductsSuggestions $product) : bool
+    {
+        $fields = array
+        (
+            'token'     => $this->getPushNotificationToken(),
+            'user'      => $userPushToken,
+            'message'   => $product->getShortDescription(),
+            'title'     => "Wish Tellers",
+            'url_title' => 'View more details',
+            'url'       => $product->getUrl(),
+        );
+
+        $ch = curl_init();
+        curl_setopt( $ch, CURLOPT_URL, $this->getPushNotificationServer() );
+        curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
+        curl_setopt( $ch, CURLOPT_POSTFIELDS, $fields);
+        $result = curl_exec($ch );
+        curl_close( $ch );
+
+        return $result['status'] === 1;
     }
 }

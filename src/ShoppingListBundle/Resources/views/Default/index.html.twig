@@ -128,11 +128,11 @@
             <ul id="autocomplete" data-role="listview" data-inset="true" data-filter="true" data-input="#autocomplete-input"></ul>
 
             {% if suggestedProduct is defined %}
-            <div data-theme="a" id="popupProduct" data-role="popup" data-overlay-theme="a" data-position-to="window" class="ui-content">
+            <div data-theme="a" id="popupProduct" data-role="popup" data-overlay-theme="a" class="ui-corner-all">
                 <div style="padding:20px">
-                    <p>{{ suggestedProduct.description }}</p>
+                    <p>{{ suggestedProduct.shortDescription }}</p>
                     {% if suggestedProduct.image != '' %}
-                        <p><img src="{{ suggestedProduct.image }}" style="width: 200px;"></p>
+                        <p style="text-align: center;"><img src="{{ suggestedProduct.image }}" style="width: 200px;"></p>
                     {% endif %}
                     <a href="{{ suggestedProduct.url }}" class="ui-btn ui-btn-b ui-shadow ui-corner-all">Buy now</a>
                     <a href="" id="btnPopupAddProduct" class="ui-btn ui-btn-b ui-shadow ui-corner-all">Add to wish list</a>
@@ -263,11 +263,9 @@
                         var $newProd =
                                 $('<li class="ui-li-has-alt ui-first-child ui-li-has-count ui-li-has-thumb" style="opacity: 0.1">' +
                                         '<a class="ui-btn" href="#demo-mail">' +
-                                        '<img src="' + prod.iamge + '">' +
+                                        '<div style="text-align: center;"><img src="' + prod.iamge + '"></div>' +
                                         '<h3>' + prod.name + '</h3>' +
-                                        '<p><strong>' + prod.shortDescription + '</strong></p>' +
-                                        '<p>' + prod.description + '</p>' +
-                                        //'<span class="ui-li-count"></span>' +
+                                        '<p>' + prod.shortDescription + '</p>' +
                                         '</a>' +
                                         '<a title="Remove from favorites" href="#" class="delete ui-btn ui-btn-icon-notext ui-icon-star"></a>' +
                                         '</li>');
@@ -288,8 +286,6 @@
                                 addSuggestedProductToList(
                                     {
                                         name: '{{ suggestedProduct.name}}',
-                                        description: '{{ suggestedProduct.description}}',
-                                        shortDescription: '{{ suggestedProduct.shortDescription}}',
                                         shortDescription: '{{ suggestedProduct.shortDescription}}',
                                         image: '{{ suggestedProduct.image}}'
                                     }
@@ -304,7 +300,7 @@
                             });
                     });
 
-                    $("#popupProduct").popup("open");
+                    setTimeout(function(){ $("#popupProduct").popup("open"); }, 1000);
 
                 {% endif %}
             });

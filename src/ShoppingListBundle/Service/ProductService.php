@@ -3,8 +3,9 @@ namespace ShoppingListBundle\Service;
 
 use Doctrine\ORM\EntityManager;
 use ShoppingListBundle\Entity\Products;
-use ShoppingListBundle\Repository\ProductsBoughtRepository;
+use ShoppingListBundle\Entity\ProductsBought;
 use ShoppingListBundle\Entity\ProductsSuggestions;
+use ShoppingListBundle\Repository\ProductsBoughtRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use ShoppingListBundle\Repository\ProductsRepository;
 
@@ -95,9 +96,7 @@ class ProductService
     public function getProductByReccomandation($productId)
     {
         /** @var ProductsSuggestions $recommandation */
-        $recommandation = $this->getEntityManager()
-            ->getRepository('ShoppingListBundle:ProductsSuggestions')
-            ->find($productId);
+        $recommandation = $this->getRecommendedProduct($productId);
 
         /** @var Products $product */
         $product = $this->getEntityManager()
@@ -160,5 +159,71 @@ class ProductService
         }
 
         return $product;
+    }
+
+    /**
+     * Get products for that we must send reminder
+     *
+     * @return array
+     */
+    public function getReccomendedNotificationProducts()
+    {
+        $productIds = array();
+        $products = $this->getEntityManager()
+            ->getRepository('ShoppingListBundle:Products')
+            ->findAll();
+
+        /** @var Products $product */
+        foreach ($products as $product) {
+            $mustSendNotification = $this->getMustSendNotificationForProduct($product);
+            if ($mustSendNotification) {
+                $productIds[] = $product->getId();
+            }
+        }
+
+        return $productIds;
+    }
+
+    /**
+     * @param Products $product
+     * @return bool
+     */
+    public function getMustSendNotificationForProduct(Products $product)
+    {
+        $boughts = $this->getEntityManager()
+            ->getRepository('ShoppingListBundle:ProductsBought')
+            ->findBy(array('product' => $product), array('buyingDate' => 'DESC'));
+        if (count($boughts) < 2) {
+            return false;
+        }
+
+        $days = $this->getNumberOfDays($boughts);
+        /** @var \DateTime $lastBought */
+        $lastBought = $boughts[0]->getBuyingDate();
+        $now = new \DateTime('now');
+
+        return $now->format('Y-m-d') == $lastBought->modify("+" . $days . " days")->format('Y-m-d');
+    }
+
+    /**
+     * @param array $boughts
+     * @return array
+     */
+    public function getNumberOfDays($boughts)
+    {
+        $days = array();
+        /** @var ProductsBought $bought */
+        foreach ($boughts as $cnt => $bought) {
+            if ($cnt == count($boughts) - 1) {
+                break;
+            }
+            $interval = $boughts[$cnt+1]->getBuyingDate()->diff($bought->getBuyingDate());
+            $day = (int)$interval->format('%a');
+            if ($day >= 1) {
+                $days[] = $day;
+            }
+        }
+
+        return (int)(array_sum($days)/count($days));
     }
 }
