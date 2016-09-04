@@ -15,7 +15,7 @@ class DefaultController extends Controller
     public function indexAction($productId = self::NO_PRODUCT_ID)
     {
         /** @var ProductService $productService */
-        $productService = $this->get('ProductService::ID');
+        $productService = $this->get(ProductService::ID);
 
         $productsList = $productService->getShoppingListProducts();
 
