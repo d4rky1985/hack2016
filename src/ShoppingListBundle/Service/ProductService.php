@@ -166,7 +166,7 @@ class ProductService
         $productIds = array();
         $products = $this->entityManager
             ->getRepository('ShoppingListBundle:Products')
-            ->findAll();
+            ->findBy(array('status' => Products::STATUS_BOUGHT));
 
         /** @var Products $product */
         foreach ($products as $product) {
