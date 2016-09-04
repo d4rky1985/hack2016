@@ -140,7 +140,7 @@
                 {% for product in productsList.productsListNotBought %}
                 <li class="ui-li-has-alt ui-first-child">
                     <a class="ui-btn" href="#demo-mail">
-                        <img src="../_assets/img/album-bb.jpg">
+                        <img src="{{ product.image }}">
                         <h3>{{ product.name }}</h3>
                         <span class="ui-li-count">{{ product.quantity }}</span>
                     </a>
@@ -155,7 +155,7 @@
                 {% for product in productsList.productsListBought %}
                     <li class="ui-li-has-alt ui-first-child">
                         <a class="ui-btn" href="#demo-mail">
-                            <img src="../_assets/img/album-bb.jpg">
+                            <img src="{{ product.image }}">
                             <h3>{{ product.name }}</h3>
                             <span class="ui-li-count">{{ product.quantity }}</span>
                         </a>
@@ -247,7 +247,7 @@
                         var $newProd =
                                 $('<li class="ui-li-has-alt ui-first-child ui-li-has-count ui-li-has-thumb" style="opacity: 0.1">' +
                                         '<a class="ui-btn" href="#demo-mail">' +
-                                        '<img src="' + prod.iamge + '">' +
+                                        '<img src="' + prod.image + '">' +
                                         '<h3>' + prod.name + '</h3>' +
                                         '</a>' +
                                         '<a title="Remove from favorites" href="#" class="delete ui-btn ui-btn-icon-notext ui-icon-star"></a>' +
