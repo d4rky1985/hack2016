@@ -29,13 +29,28 @@
                         listitem
                                 .addClass( transition )
                                 .on( "webkitTransitionEnd transitionend otransitionend", function() {
-                                    listitem.remove();
-                                    $( "#list" ).listview( "refresh" ).find( ".border-bottom" ).removeClass( "border-bottom" );
+
+                                    $.ajax({
+                                        method: "POST",
+                                        url: "{{ path('product_is_bought') }}",
+                                        dataType: "json",
+                                        data: {
+                                            product: listitem.find( "input" ).val()
+                                        }
+                                    }).then( function ( response ) {
+                                        var listitemtemp = listitem;
+                                        listitem.remove();
+                                        console.log(listitemtemp);
+                                        listitemtemp.removeClass("right");
+                                        $("#list").append(listitemtemp);
+                                        $( "#list" ).listview( "refresh" ).find( ".border-bottom" ).removeClass( "border-bottom" );
+                                    });
                                 })
                                 .prev( "li" ).children( "a" ).addClass( "border-bottom" )
                                 .end().end().children( ".ui-btn" ).removeClass( "ui-btn-active" );
                     }
                     else {
+
                         listitem.remove();
                         $( "#list" ).listview( "refresh" );
                     }
@@ -139,6 +154,7 @@
                 data-split-icon="delete">
                 {% for product in productsList.productsListNotBought %}
                 <li class="ui-li-has-alt ui-first-child">
+                    <input type="text" class="ui-screen-hidden" hidden value="{{ product.id }}">
                     <a class="ui-btn" href="#demo-mail">
                         <img src="../_assets/img/album-bb.jpg">
                         <h3>{{ product.name }}</h3>

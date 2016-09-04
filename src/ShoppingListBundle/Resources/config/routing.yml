@@ -18,3 +18,12 @@ shopping_list_add_product_ajax:
         productId: '\d+'
     options:
         expose: true
+
+product_is_bought:
+    path:     /product-is-bought/{productId}
+    defaults: { _controller: ShoppingListBundle:Default:productBoughtAjax, productId: 0 }
+    methods:  [POST]
+    requirements:
+        productId: '\d+'
+    options:
+        expose: true

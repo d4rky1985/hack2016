@@ -130,6 +130,21 @@ class ProductService
         $this->getEntityManager()->flush();
     }
 
+    public function productIsBought($productId) {
+        /** @var ProductsRepository $productsRepository */
+        $productsRepository = $this->getEntityManager()->getRepository('ShoppingListBundle:Products');
+
+        /** @var Products $product */
+        $product = $productsRepository->find($productId);
+
+        if ($product instanceof Products) {
+            $product->setStatus(Products::STATUS_BOUGHT);
+            $product->setType(Products::MANUAL_PRODUCT_TYPE);
+            $this->getEntityManager()->persist($product);
+            $this->getEntityManager()->flush();
+        }
+    }
+
     /**
      * @param $productId
      * @return ProductsSuggestions
