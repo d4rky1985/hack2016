@@ -9,6 +9,8 @@ use Facebook\Authentication\AccessToken;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpFoundation\Response;
+use UserBundle\Entity\FeelingMapping;
+use UserBundle\Repository\FeelingMappingRepository;
 
 class NotifyService
 {
@@ -98,7 +100,7 @@ class NotifyService
                             $result = $this->verifyFeed($words);
 
                             if ($result) {
-                                $this->notifyUser($result);
+                                $this->notifyUser($user, $result);
                                 return;
                             }
                         }
@@ -109,6 +111,50 @@ class NotifyService
                     'Error: ' . $e->getMessage() . '</info>');
             }
         }
+    }
+
+    /**
+     * @param $words
+     *
+     * @return bool|null|FeelingMapping
+     */
+    public function verifyFeed($words)
+    {
+        /** @var FeelingMappingRepository $feelingMappingRepository */
+        $feelingMappingRepository = $this->entityManager->getRepository('UserBundle:FeelingMapping');
+
+        foreach ($words as $word) {
+            $word = $this->removePunctuationFromWord($word);
+
+            $feelingMapping = $feelingMappingRepository->findOneBy(
+                array(
+                    'fbStatus' => $word
+                )
+            );
+
+            if ($feelingMapping instanceof FeelingMapping) {
+                return $feelingMapping;
+            }
+        }
+
+        return false;
+    }
+
+    public function notifyUser($user, $feelingMapping)
+    {
+        //todo notify user by push up
+    }
+
+    /**
+     * @param string $word
+     *
+     * @return string
+     */
+    public function removePunctuationFromWord($word) : string
+    {
+        $charsToRemove = array('!', ',', '.', '#', '?');
+
+        return str_replace ($charsToRemove , '' , $word);
     }
 
     /**
