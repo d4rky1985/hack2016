@@ -6,6 +6,7 @@ use ShoppingListBundle\Service\ProductService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class DefaultController extends Controller
 {
@@ -14,13 +15,21 @@ class DefaultController extends Controller
     public function indexAction($productId = self::NO_PRODUCT_ID)
     {
         /** @var ProductService $productService */
-        $productService = $this->get('hack2016.product.service');
-        $productService->getReccomendedNotificationProducts();die;
+        $productService = $this->get(ProductService::ID);
 
-        return $this->render(
-            'ShoppingListBundle:Default:index.html.twig',
-            ['productId' => $productId]
-        );
+        $productsList = $productService->getShoppingListProducts();
+
+        $options = ['productsList' => $productsList];
+
+        if (!empty($productId)) {
+            try {
+                $options['suggestedProduct'] = $productService->getRecommendedProduct($productId);
+            } catch (NotFoundHttpException $e) {
+                error_log('Invalid product id ' . $productId);
+            }
+        }
+
+        return $this->render('ShoppingListBundle:Default:index.html.twig', $options);
     }
 
     /**
@@ -44,11 +53,11 @@ class DefaultController extends Controller
     public function addProductAjaxAction(Request $request, $productId = 0)
     {
         /** @var ProductService $productService */
-        $productService = $this->get('hack2016.product.service');
+        $productService = $this->get(ProductService::ID);
         try {
             $productService->saveProduct(trim($request->request->get('product', null)), $productId);
         } catch (\Exception $e){
-            return new JsonResponse(array('success' => false));
+            return new JsonResponse(array('success' => false, 'message' => $e->getMessage()));
         }
         return new JsonResponse(array('success' => true));
     }

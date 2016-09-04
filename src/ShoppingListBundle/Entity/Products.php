@@ -14,6 +14,9 @@ class Products
 {
     const STATUS_BOUGHT = 1;
     const STATUS_NOT_BOUGHT = 0;
+    const SUGGESTED_PRODUCT_TYPE = 1;
+    const MANUAL_PRODUCT_TYPE = 0;
+
     /**
      * @var string
      *
@@ -27,20 +30,6 @@ class Products
      * @ORM\Column(name="price", type="decimal", precision=8, scale=2, nullable=true)
      */
     private $price;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="short_description", type="text", length=65535, nullable=true)
-     */
-    private $shortDescription;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="description", type="text", length=65535, nullable=true)
-     */
-    private $description;
 
     /**
      * @var string
@@ -62,6 +51,13 @@ class Products
      * @ORM\Column(name="status", type="integer")
      */
     private $status = self::STATUS_NOT_BOUGHT;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="type", type="integer")
+     */
+    private $type = self::MANUAL_PRODUCT_TYPE;
 
     /**
      * @var integer
@@ -122,51 +118,7 @@ class Products
         return $this->price;
     }
 
-    /**
-     * @return string
-     */
-    public function getShortDescription()
-    {
-        return $this->shortDescription;
-    }
-
-    /**
-     * @param string $shortDescription
-     *
-     * @return Products
-     */
-    public function setShortDescription($shortDescription)
-    {
-        $this->shortDescription = $shortDescription;
-
-        return $this;
-    }
-
-    /**
-     * Set description
-     *
-     * @param string $description
-     *
-     * @return Products
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
+     /**
      * Get id
      *
      * @return integer
@@ -231,4 +183,25 @@ class Products
     {
         $this->status = $status;
     }
+
+    /**
+     * @return int
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param int $type
+     *
+     * @return Products
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
 }

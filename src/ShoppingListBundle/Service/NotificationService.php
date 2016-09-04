@@ -53,7 +53,7 @@ class NotificationService
         $productIds = $this->getProductService()->getReccomendedNotificationProducts();
         foreach ($productIds as $productId) {
             /** @var Products $product */
-            $product = $this->getEntityManager()->getRepository('ShoppingLIstBundle:Products')->find($productId);
+            $product = $this->getEntityManager()->getRepository('ShoppingListBundle:Products')->find($productId);
             $output->write('Send notification for product: ' . $product->getName());
         }
     }

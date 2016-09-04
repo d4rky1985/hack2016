@@ -7,6 +7,11 @@ use AppBundle\Repository\UserRepository;
 use Doctrine\ORM\EntityManager;
 use Facebook\Facebook;
 
+/**
+ * Class UserService
+ *
+ * @package UserBundle\Service
+ */
 class UserService
 {
     /** @const string */
@@ -18,12 +23,12 @@ class UserService
     /**
      * @return array
      */
-    public function getFacebookHelper()
+    public function getFacebookHelper(): array
     {
         $fb = new Facebook([
             'app_id' => '334405686892982',
             'app_secret' => '3cffe9f90f909e68101f7a95e5170a6f',
-            'default_graph_version' => 'v2.5',
+            'default_graph_version' => 'v2.7',
         ]);
 
         return array(

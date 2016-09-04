@@ -5,6 +5,7 @@ use Doctrine\ORM\EntityManager;
 use ShoppingListBundle\Entity\Products;
 use ShoppingListBundle\Entity\ProductsBought;
 use ShoppingListBundle\Entity\ProductsSuggestions;
+use ShoppingListBundle\Repository\ProductsBoughtRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use ShoppingListBundle\Repository\ProductsRepository;
 
@@ -35,9 +36,39 @@ class ProductService
         $this->entityManager = $entityManager;
     }
 
+    /**
+     * @return array
+     */
     public function getShoppingListProducts() {
+        /** @var ProductsRepository $productsRepository */
+        $productsRepository = $this->getEntityManager()->getRepository('ShoppingListBundle:Products');
 
-        return;
+        /** @var ProductsBoughtRepository $productsBoughtRepository */
+        $productsBoughtRepository = $this->getEntityManager()
+            ->getRepository('ShoppingListBundle:ProductsBought');
+
+        $shoppingListProducts = $productsRepository->getAllProducts();
+
+        $productsListNotBought = [];
+        $productsListBought = [];
+
+        /** @var Products $product */
+        foreach($shoppingListProducts as $product) {
+            $productData = [
+                'id' => $product->getId(),
+                'name' => $product->getName(),
+                'image' => $product->getImage(),
+                'quantity' => $productsBoughtRepository->getProductQuantity($product->getId()),
+                'type' => $product->getType(),
+            ];
+            if($product->getStatus() == Products::STATUS_NOT_BOUGHT) {
+                $productsListNotBought[] = $productData;
+                continue;
+            }
+            $productsListBought[] = $productData;
+        }
+
+        return ['productsListNotBought' => $productsListNotBought, 'productsListBought' => $productsListBought];
     }
 
     /**
@@ -100,12 +131,12 @@ class ProductService
 
     /**
      * @param $productId
-     * @return null|object
+     * @return ProductsSuggestions
      */
     public function getRecommendedProduct($productId)
     {
         $product = $this->getEntityManager()
-            ->getRepository('ShoppingListBundle:ProductSuggestion')
+            ->getRepository('ShoppingListBundle:ProductsSuggestions')
             ->find($productId);
 
         if (empty($product)) {

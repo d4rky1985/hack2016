@@ -15,6 +15,12 @@
             <call method="setUserService">
                 <argument type="service" id="user.service"/>
             </call>
+            <call method="setPushNotificationToken">
+                <argument>%push_notification_token%</argument>
+            </call>
+            <call method="setPushNotificationServer">
+                <argument>%push_notification_server%</argument>
+            </call>
         </service>
     </services>
 </container>

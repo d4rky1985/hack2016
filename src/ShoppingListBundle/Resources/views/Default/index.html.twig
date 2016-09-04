@@ -112,26 +112,19 @@
             </form>
             <ul id="autocomplete" data-role="listview" data-inset="true" data-filter="true" data-input="#autocomplete-input"></ul>
 
-            <a href="#popupProduct"
-               data-inline="true"
-               data-role="button"
-               data-position-to="window"
-               data-rel="popup"
-               aria-haspopup="true"
-               aria-owns="popupLogin"
-               aria-expanded="false"
-               class="ui-link ui-btn ui-btn-inline ui-shadow ui-corner-all"
-               role="button">Form</a>
-
-            <div data-theme="a" id="popupProduct" data-role="popup" data-overlay-theme="a" class="ui-content">
+            {% if suggestedProduct is defined %}
+            <div data-theme="a" id="popupProduct" data-role="popup" data-overlay-theme="a" class="ui-corner-all">
                 <div style="padding:20px">
-                    <p>Cum ti-ar sta cu palarie?</p>
-                    <p><img src="https://s0emagst.akamaized.net/products/3888/3887197/images/res_9e1c595489d192168d4c10d8244f91c2_450x450_100_70jc.jpg" width="200"></p>
-                    <a href="http://m.emag.ro/palarie-kangol-sweetcorn-siren-mov-m-6927bcb2/pd/D9G9D2BBM/" class="ui-btn ui-btn-b ui-shadow ui-corner-all">Buy now</a>
+                    <p>{{ suggestedProduct.shortDescription }}</p>
+                    {% if suggestedProduct.image != '' %}
+                        <p style="text-align: center;"><img src="{{ suggestedProduct.image }}" style="width: 200px;"></p>
+                    {% endif %}
+                    <a href="{{ suggestedProduct.url }}" class="ui-btn ui-btn-b ui-shadow ui-corner-all">Buy now</a>
                     <a href="" id="btnPopupAddProduct" class="ui-btn ui-btn-b ui-shadow ui-corner-all">Add to wish list</a>
                     <a href="" id="btnPopupClose" class="ui-btn ui-btn-b ui-shadow ui-corner-all">No, thank you!</a>
                 </div>
             </div>
+            {% endif %}
 
             <div id="popupError" class="ui-content" data-role="popup" data-theme="a">
                 <p>Sorry! An error occured.</p>
@@ -144,38 +137,35 @@
 
             <ul id="list" data-count-theme="b" class="ui-listview" data-role="listview" data-icon="false"
                 data-split-icon="delete">
+                {% for product in productsList.productsListNotBought %}
                 <li class="ui-li-has-alt ui-first-child">
                     <a class="ui-btn" href="#demo-mail">
                         <img src="../_assets/img/album-bb.jpg">
-                        <h3>Produs 1</h3>
-                        <p><strong>Short description</strong></p>
-                        <p>Long description blah blah blah blah blah blah blah</p>
-                        <span class="ui-li-count">12</span>
+                        <h3>{{ product.name }}</h3>
+                        <span class="ui-li-count">{{ product.quantity }}</span>
                     </a>
-                    <a title="Remove from favorites" href="#" class="delete ui-btn ui-btn-icon-notext
-                    ui-icon-star"></a>
+                    {% if product.type %}
+                        <a title="Remove from favorites" href="#" class="delete ui-btn ui-btn-icon-notext ui-icon-star"></a>
+                    {% else %}
+                        <a href="#" class="ui-btn"></a>
+                    {% endif %}
                 </li>
-                <li class="ui-li-has-alt">
-                    <a class="ui-btn" href="#demo-mail">
-                        <img src="../_assets/img/album-bb.jpg">
-                        <h3>Produs 2</h3>
-                        <p><strong>Short description</strong></p>
-                        <p>Long description blah blah blah blah blah blah blah</p>
-                        <span class="ui-li-count">35</span>
-                    </a>
-                    <a title="Remove from favorites" href="#" class="delete ui-btn ui-btn-icon-notext
-                    ui-icon-star"></a>
-                </li>
-                <li class="ui-li-has-alt">
-                    <a class="ui-btn" href="#demo-mail">
-                        <img src="../_assets/img/album-bb.jpg">
-                        <h3>Produs 2</h3>
-                        <p><strong>Short description</strong></p>
-                        <p>Long description blah blah blah blah blah blah blah</p>
-                        <span class="ui-li-count">35</span>
-                    </a>
-                    <a href="#" class="ui-btn"></a>
-                </li>
+                {% endfor %}
+                <li><strong>Already Bought</strong></li>
+                {% for product in productsList.productsListBought %}
+                    <li class="ui-li-has-alt ui-first-child">
+                        <a class="ui-btn" href="#demo-mail">
+                            <img src="../_assets/img/album-bb.jpg">
+                            <h3>{{ product.name }}</h3>
+                            <span class="ui-li-count">{{ product.quantity }}</span>
+                        </a>
+                        {% if product.type %}
+                            <a title="Remove from favorites" href="#" class="delete ui-btn ui-btn-icon-notext ui-icon-star"></a>
+                        {% else %}
+                            <a href="#" class="ui-btn"></a>
+                        {% endif %}
+                    </li>
+                {% endfor %}
             </ul>
 
             <div id="confirm-placeholder" style="display: none;"><!-- placeholder for confirm --></div><!-- /popup -->
@@ -251,26 +241,52 @@
                     }
                 }
 
-                $('#btnPopupClose').on('click', function(e){
-                    e.preventDefault();
-                    $('#popupProduct').popup('close');
-                });
+                {% if suggestedProduct is defined %}
 
-                $('#btnPopupAddProduct').on('click', function(e) {
-                    e.preventDefault();
-                    $.mobile.loading('show');
-                    $.post(Routing.generate('shopping_list_add_product_ajax', { productId: {{ productId }} }))
-                        .done(function () {
-                            $.mobile.loading('hide');
-                            $('#popupProduct').popup('close');
-                        })
-                        .fail(function() {
-                            $.mobile.loading('hide');
-                            $('#popupProduct').popup('close');
-                            $('#popupError').delay(500).popup('open');
-                        });
-                });
+                    function addSuggestedProductToList(prod) {
+                        var $newProd =
+                                $('<li class="ui-li-has-alt ui-first-child ui-li-has-count ui-li-has-thumb" style="opacity: 0.1">' +
+                                        '<a class="ui-btn" href="#demo-mail">' +
+                                        '<div style="text-align: center;"><img src="' + prod.iamge + '"></div>' +
+                                        '<h3>' + prod.name + '</h3>' +
+                                        '<p>' + prod.shortDescription + '</p>' +
+                                        '</a>' +
+                                        '<a title="Remove from favorites" href="#" class="delete ui-btn ui-btn-icon-notext ui-icon-star"></a>' +
+                                        '</li>');
 
+                        $newProd.prependTo('#list').animate({opacity: 1}, 2000);
+                    }
+
+                    $('#btnPopupClose').on('click', function(e){
+                        e.preventDefault();
+                        $('#popupProduct').popup('close');
+                    });
+
+                    $('#btnPopupAddProduct').on('click', function(e) {
+                        e.preventDefault();
+                        $.mobile.loading('show');
+                        $.post(Routing.generate('shopping_list_add_product_ajax', { productId: {{ suggestedProduct.id }} }))
+                            .done(function () {
+                                addSuggestedProductToList(
+                                    {
+                                        name: '{{ suggestedProduct.name}}',
+                                        shortDescription: '{{ suggestedProduct.shortDescription}}',
+                                        image: '{{ suggestedProduct.image}}'
+                                    }
+                                );
+                                $.mobile.loading('hide');
+                                $('#popupProduct').popup('close');
+                            })
+                            .fail(function() {
+                                $.mobile.loading('hide');
+                                $('#popupProduct').popup('close');
+                                $('#popupError').popup('open');
+                            });
+                    });
+
+                    setTimeout(function(){ $("#popupProduct").popup("open"); }, 1000);
+
+                {% endif %}
             });
         </script>
 
