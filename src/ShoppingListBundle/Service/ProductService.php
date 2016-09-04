@@ -56,8 +56,6 @@ class ProductService
             $productData = [
                 'id' => $product->getId(),
                 'name' => $product->getName(),
-                'short_description' => $product->getShortDescription(),
-                'description' => $product->getDescription(),
                 'image' => $product->getImage(),
                 'quantity' => $productsBoughtRepository->getProductQuantity($product->getId()),
                 'type' => $product->getType(),
