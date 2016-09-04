@@ -3,7 +3,9 @@ namespace ShoppingListBundle\Service;
 
 use Doctrine\ORM\EntityManager;
 use ShoppingListBundle\Entity\Products;
+use ShoppingListBundle\Entity\ProductsBought;
 use ShoppingListBundle\Entity\ProductsSuggestions;
+use ShoppingListBundle\Repository\ProductsBoughtRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use ShoppingListBundle\Repository\ProductsRepository;
 
@@ -114,5 +116,22 @@ class ProductService
         }
 
         return $product;
+    }
+
+    public function getSortedShopingListProducts()
+    {
+        /** @var ProductsBoughtRepository $productsBoughtRepository */
+        $productsBoughtRepository = $this->getEntityManager()->getRepository('ShoppingListBundle:ProductsBought');
+
+        $productsBought = $productsBoughtRepository->getProductsBoughtOrder();
+
+        $products = array();
+
+        /** @var ProductsBought $productBought */
+        foreach ($productsBought as $productBought) {
+            $products[$productBought->getParent()->getId()] = $productBought->getProduct();
+        }
+        //todo show products sorted
+
     }
 }
