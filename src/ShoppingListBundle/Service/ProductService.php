@@ -3,6 +3,7 @@ namespace ShoppingListBundle\Service;
 
 use Doctrine\ORM\EntityManager;
 use ShoppingListBundle\Entity\Products;
+use ShoppingListBundle\Entity\ProductsSuggestions;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use ShoppingListBundle\Repository\ProductsRepository;
 
@@ -61,12 +62,12 @@ class ProductService
 
     /**
      * @param $productId
-     * @return null|object
+     * @return ProductsSuggestions
      */
     public function getRecommendedProduct($productId)
     {
         $product = $this->getEntityManager()
-            ->getRepository('ShoppingListBundle:ProductSuggestion')
+            ->getRepository('ShoppingListBundle:ProductsSuggestions')
             ->find($productId);
 
         if (empty($product)) {

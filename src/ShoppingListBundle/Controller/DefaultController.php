@@ -6,6 +6,7 @@ use ShoppingListBundle\Service\ProductService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class DefaultController extends Controller
 {
@@ -13,11 +14,20 @@ class DefaultController extends Controller
 
     public function indexAction($productId = self::NO_PRODUCT_ID)
     {
+        /** @var ProductService $productService */
+        $productService = $this->get('hack2016.product.service');
 
-        return $this->render(
-            'ShoppingListBundle:Default:index.html.twig',
-            ['productId' => $productId]
-        );
+        $options = array();
+
+        if (!empty($productId)) {
+            try {
+                $options['suggestedProduct'] = $productService->getRecommendedProduct($productId);
+            } catch (NotFoundHttpException $e) {
+                error_log('Invalid product id ' . $productId);
+            }
+        }
+
+        return $this->render('ShoppingListBundle:Default:index.html.twig', $options);
     }
 
     /**
