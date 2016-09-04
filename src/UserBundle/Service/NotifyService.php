@@ -12,6 +12,11 @@ use Symfony\Component\HttpFoundation\Response;
 use UserBundle\Entity\FeelingMapping;
 use UserBundle\Repository\FeelingMappingRepository;
 
+/**
+ * Class NotifyService
+ *
+ * @package UserBundle\Service
+ */
 class NotifyService
 {
     /** @const string */
@@ -140,13 +145,14 @@ class NotifyService
         return false;
     }
 
+    //todo docblock
     public function notifyUser($user, $feelingMapping)
     {
         //todo notify user by push up
     }
 
     /**
-     * @param string $word
+     * @param $word
      *
      * @return string
      */
@@ -154,7 +160,7 @@ class NotifyService
     {
         $charsToRemove = array('!', ',', '.', '#', '?');
 
-        return str_replace ($charsToRemove , '' , $word);
+        return str_replace($charsToRemove, '', $word);
     }
 
     /**

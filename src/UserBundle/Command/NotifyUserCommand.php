@@ -12,6 +12,7 @@ use UserBundle\Service\NotifyService;
 
 /**
  * Class NotifyUserCommand
+ *
  * @package UserBundle\Command
  */
 class NotifyUserCommand extends Command implements ContainerAwareInterface
@@ -46,7 +47,7 @@ class NotifyUserCommand extends Command implements ContainerAwareInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param ContainerInterface|null $container
      */
     public function setContainer(ContainerInterface $container = null)
     {
@@ -67,30 +68,25 @@ class NotifyUserCommand extends Command implements ContainerAwareInterface
     }
 
     /**
-     * Perform some internal validation on the user input just after the input has been validated by symfony.
-     *
-     * @param InputInterface  $input  An InputInterface instance
-     * @param OutputInterface $output An OutputInterface instance
-     *
-     * @throws \InvalidArgumentException
+     * @param InputInterface $input
+     * @param OutputInterface $output
      */
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
         $this->service = $this->getContainer()->get(NotifyService::ID);
 
-        if ($this->service ===  null) {
+        if ($this->service === null) {
             throw new \InvalidArgumentException('Please specify the service to be used with this command');
         }
 
-        // process action option
-        $method = $input->getOption('action').'CronAction';
+        $method = $input->getOption('action') . 'CronAction';
         if (!method_exists(get_class($this->service), $method)) {
-            throw new\InvalidArgumentException("Method {$method} doesn't exist in ".get_class($this->service));
+            throw new\InvalidArgumentException("Method {$method} doesn't exist in " . get_class($this->service));
         }
     }
 
     /**
-     * @param InputInterface  $input
+     * @param InputInterface $input
      * @param OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -128,6 +124,6 @@ class NotifyUserCommand extends Command implements ContainerAwareInterface
      */
     protected function display(OutputInterface $output, $message)
     {
-        $output->writeln('<info>['.date('Y-m-d H:i:s').']</info> > '.$message);
+        $output->writeln('<info>[' . date('Y-m-d H:i:s') . ']</info> > ' . $message);
     }
 }

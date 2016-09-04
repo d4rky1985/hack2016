@@ -17,7 +17,7 @@ class DefaultController extends Controller
     /**
      * @return Response
      */
-    public function indexAction()
+    public function indexAction() : Response
     {
         /** @var UserService $userService */
         $userService = $this->get('user.service');
@@ -42,7 +42,10 @@ class DefaultController extends Controller
         );
     }
 
-    public function loginAction()
+    /**
+     * @return Response
+     */
+    public function loginAction() : Response
     {
         /** @var UserService $userService */
         $userService = $this->get('user.service');
@@ -65,7 +68,6 @@ class DefaultController extends Controller
             }
         } catch (\Exception $e) {
             $error = $e->getMessage();
-            var_dump($e->getMessage());die();
         }
 
         return $this->render(
